@@ -2,7 +2,22 @@
 
 ## Introduction
 
-Notes of this chapter references chapter 7 (Wlakthrough 1: ) of [Data Science in Education Using R](https://datascienceineducation.com/).
+Notes of this chapter references chapter 7 ([Walkthrough 1](https://datascienceineducation.com/c07.html): The Education Data Science Pipeline With Online Science Class Data) of [Data Science in Education Using R](https://datascienceineducation.com/).
+
+The chapter focuses on processing data to prepare the information for data analysis. At the finish of this chapter there is also an analysis (regression model), but the main point of this walkthrough is data wrangling. The following list presents only those functions where I have learning something new:
+
+- apply a function across multiple columns using `across()`, explaining purrr style formulas, and procedures to convert old `(mutate)_if`, `_at`, and `_all` code
+- create columns from scale values and reversing scales using `case_when()`
+- convert from wide to long format using `pivot_longer()`
+- separate data from one column into different columns using `separate()`
+- join dataset using different kinds of joins (`left_join()`, `semi_join()`, `anti_join()`, `right_join()`)
+- select distinct/unique rows using `distinct()`
+- generate table output `tab_model()` from the {sjPlot} package
+- save tables in Word format using functions from the {apaTables} package
+
+## Setup
+
+Load all packages used for this chapter.
 
 
 ```r
@@ -20,6 +35,7 @@ library(tidyverse)
 #> x dplyr::lag()    masks stats::lag()
 library(apaTables)
 library(sjPlot)
+#> Install package "strengejacke" from GitHub (`devtools::install_github("strengejacke/strengejacke")`) to load all sj-packages at once!
 library(readxl)
 library(dataedu)
 ```
@@ -922,7 +938,7 @@ dat %>%
 #> Warning: Removed 30 rows containing missing values (geom_point).
 ```
 
-<img src="01-intro_files/figure-html/grade-time-1.png" width="672" />
+<img src="01-process-data_files/figure-html/grade-time-1.png" width="672" />
 
 #### Scatterplot with best fit
 
@@ -943,7 +959,7 @@ dat %>%
 #> Warning: Removed 30 rows containing missing values (geom_point).
 ```
 
-<img src="01-intro_files/figure-html/grade-time2-1.png" width="672" />
+<img src="01-process-data_files/figure-html/grade-time2-1.png" width="672" />
 
 Looking at this plot, it appears that the more time students spent on the course, the higher their final grade is.
 

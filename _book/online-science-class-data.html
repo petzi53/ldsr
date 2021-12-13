@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>2 Online Science Class Data | Learning Data Science with R</title>
+<meta name="author" content="Peter Baumgartner">
+<meta name="description" content="2.1 Introduction Notes of this chapter references chapter 7 (Walkthrough 1: The Education Data Science Pipeline With Online Science Class Data) of Data Science in Education Using R. The chapter...">
+<meta name="generator" content="bookdown 0.24 with bs4_book()">
+<meta property="og:title" content="2 Online Science Class Data | Learning Data Science with R">
+<meta property="og:type" content="book">
+<meta property="og:description" content="2.1 Introduction Notes of this chapter references chapter 7 (Walkthrough 1: The Education Data Science Pipeline With Online Science Class Data) of Data Science in Education Using R. The chapter...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="2 Online Science Class Data | Learning Data Science with R">
+<meta name="twitter:description" content="2.1 Introduction Notes of this chapter references chapter 7 (Walkthrough 1: The Education Data Science Pipeline With Online Science Class Data) of Data Science in Education Using R. The chapter...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.11/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><link rel="stylesheet" href="bs4_style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Learning Data Science with R</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html"><span class="header-section-number">1</span> Preface</a></li>
+<li><a class="active" href="online-science-class-data.html"><span class="header-section-number">2</span> Online Science Class Data</a></li>
+<li><a class="" href="cross.html"><span class="header-section-number">3</span> Cross-references</a></li>
+<li><a class="" href="parts.html"><span class="header-section-number">4</span> Parts</a></li>
+<li><a class="" href="footnotes-and-citations.html"><span class="header-section-number">5</span> Footnotes and citations</a></li>
+<li><a class="" href="blocks.html"><span class="header-section-number">6</span> Blocks</a></li>
+<li><a class="" href="sharing-your-book.html"><span class="header-section-number">7</span> Sharing your book</a></li>
+<li><a class="" href="references.html">References</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/petzi53/ldsr">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="online-science-class-data" class="section level1" number="2">
+<h1>
+<span class="header-section-number">2</span> Online Science Class Data<a class="anchor" aria-label="anchor" href="#online-science-class-data"><i class="fas fa-link"></i></a>
+</h1>
+<div id="introduction" class="section level2" number="2.1">
+<h2>
+<span class="header-section-number">2.1</span> Introduction<a class="anchor" aria-label="anchor" href="#introduction"><i class="fas fa-link"></i></a>
+</h2>
+<p>Notes of this chapter references chapter 7 (<a href="https://datascienceineducation.com/c07.html">Walkthrough 1</a>: The Education Data Science Pipeline With Online Science Class Data) of <a href="https://datascienceineducation.com/">Data Science in Education Using R</a>.</p>
+<p>The chapter focuses on processing data to prepare the information for data analysis. At the finish of this chapter there is also an analysis (regression model), but the main point of this walkthrough is data wrangling. The following list presents only those functions where I have learning something new:</p>
+<ul>
+<li>apply a function across multiple columns using <code><a href="https://dplyr.tidyverse.org/reference/across.html">across()</a></code>, explaining purrr style formulas, and procedures to convert old <code>(mutate)_if</code>, <code>_at</code>, and <code>_all</code> code</li>
+<li>create columns from scale values and reversing scales using <code><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when()</a></code>
+</li>
+<li>convert from wide to long format using <code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer()</a></code>
+</li>
+<li>separate data from one column into different columns using <code><a href="https://tidyr.tidyverse.org/reference/separate.html">separate()</a></code>
+</li>
+<li>join dataset using different kinds of joins (<code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">semi_join()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">anti_join()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">right_join()</a></code>)</li>
+<li>select distinct/unique rows using <code><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct()</a></code>
+</li>
+<li>generate table output <code><a href="https://strengejacke.github.io/sjPlot/reference/tab_model.html">tab_model()</a></code> from the {sjPlot} package</li>
+<li>save tables in Word format using functions from the {apaTables} package</li>
+</ul>
+</div>
+<div id="setup" class="section level2" number="2.2">
+<h2>
+<span class="header-section-number">2.2</span> Setup<a class="anchor" aria-label="anchor" href="#setup"><i class="fas fa-link"></i></a>
+</h2>
+<p>Load all packages used for this chapter.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Data Science in Education</span>
+<span class="co"># Packages for Walkthrough 1 </span>
+
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
+<span class="co">#&gt; ── Attaching packages ───────────────────────────── tidyverse 1.3.1 ──</span>
+<span class="co">#&gt; ✓ ggplot2 3.3.5     ✓ purrr   0.3.4</span>
+<span class="co">#&gt; ✓ tibble  3.1.6     ✓ dplyr   1.0.7</span>
+<span class="co">#&gt; ✓ tidyr   1.1.4     ✓ stringr 1.4.0</span>
+<span class="co">#&gt; ✓ readr   2.1.1     ✓ forcats 0.5.1</span>
+<span class="co">#&gt; ── Conflicts ──────────────────────────────── tidyverse_conflicts() ──</span>
+<span class="co">#&gt; x dplyr::filter() masks stats::filter()</span>
+<span class="co">#&gt; x dplyr::lag()    masks stats::lag()</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dstanley4/apaTables">apaTables</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://strengejacke.github.io/sjPlot/">sjPlot</a></span><span class="op">)</span>
+<span class="co">#&gt; Install package "strengejacke" from GitHub (`devtools::install_github("strengejacke/strengejacke")`) to load all sj-packages at once!</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/data-edu/dataedu">dataedu</a></span><span class="op">)</span></code></pre></div>
+</div>
+<div id="process-survey" class="section level2" number="2.3">
+<h2>
+<span class="header-section-number">2.3</span> Process Survey<a class="anchor" aria-label="anchor" href="#process-survey"><i class="fas fa-link"></i></a>
+</h2>
+<div id="inspect-data" class="section level3" number="2.3.1">
+<h3>
+<span class="header-section-number">2.3.1</span> Inspect Data<a class="anchor" aria-label="anchor" href="#inspect-data"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Pre-survey for the F15 and S16 semesters</span>
+<span class="va">pre_survey</span> <span class="op">&lt;-</span> <span class="fu">dataedu</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/dataedu/man/pre_survey.html">pre_survey</a></span>
+<span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">pre_survey</span><span class="op">)</span>
+<span class="co">#&gt; Rows: 1,102</span>
+<span class="co">#&gt; Columns: 12</span>
+<span class="co">#&gt; $ opdata_username      &lt;chr&gt; "_80624_1", "_80623_1", "_82588_1", "_8…</span>
+<span class="co">#&gt; $ opdata_CourseID      &lt;chr&gt; "FrScA-S116-01", "BioA-S116-01", "OcnA-…</span>
+<span class="co">#&gt; $ Q1MaincellgroupRow1  &lt;dbl&gt; 4, 4, NA, 4, NA, 4, NA, 5, NA, 4, 4, 5,…</span>
+<span class="co">#&gt; $ Q1MaincellgroupRow2  &lt;dbl&gt; 4, 4, NA, 3, NA, 2, NA, 3, NA, 4, 4, 4,…</span>
+<span class="co">#&gt; $ Q1MaincellgroupRow3  &lt;dbl&gt; 4, 3, NA, 3, NA, 2, NA, 3, NA, 3, 3, 3,…</span>
+<span class="co">#&gt; $ Q1MaincellgroupRow4  &lt;dbl&gt; 1, 2, NA, 2, NA, 2, NA, 1, NA, 2, 1, 1,…</span>
+<span class="co">#&gt; $ Q1MaincellgroupRow5  &lt;dbl&gt; 5, 4, NA, 3, NA, 4, NA, 5, NA, 4, 5, 5,…</span>
+<span class="co">#&gt; $ Q1MaincellgroupRow6  &lt;dbl&gt; 4, 4, NA, 3, NA, 4, NA, 4, NA, 4, 5, 5,…</span>
+<span class="co">#&gt; $ Q1MaincellgroupRow7  &lt;dbl&gt; 1, 2, NA, 3, NA, 1, NA, 1, NA, 2, 2, 1,…</span>
+<span class="co">#&gt; $ Q1MaincellgroupRow8  &lt;dbl&gt; 5, 3, NA, 4, NA, 4, NA, 5, NA, 4, 4, 5,…</span>
+<span class="co">#&gt; $ Q1MaincellgroupRow9  &lt;dbl&gt; 5, 4, NA, 2, NA, 4, NA, 3, NA, 3, 3, 4,…</span>
+<span class="co">#&gt; $ Q1MaincellgroupRow10 &lt;dbl&gt; 5, 2, NA, 4, NA, 4, NA, 4, NA, 3, 5, 4,…</span></code></pre></div>
+<p>This data source is a self-report survey. Data was collected
+before the start of the course. The survey included ten items, each
+corresponding to one of three motivation <em>measures</em>: interest, utility
+value, and perceived competence. A <em>measure</em> is a concept that we try to
+make concrete and assess using survey questions. The three motivation
+measures we explore here come from Expectancy-Value Theory, which states
+that students are motivated to learn when they both believe that they
+can achieve something (expectancy, also known as “perceived competence”)
+and believe that the concept they are trying to learn is important
+(value) (<a href="https://datascienceineducation.com/references.html#ref-wigfield2000">Wigfield &amp; Eccles,
+2000</a>).</p>
+<p>There are multiple types of value, but we explore two of them here:
+interest and utility value. Utility value is the degree to which a
+person is able to connect the concept being learned with something they
+will utilize in their future life. This survey included the following
+ten items:</p>
+<ol style="list-style-type: decimal">
+<li>I think this course is an interesting subject. (Interest)</li>
+<li>What I am learning in this class is relevant to my life. (Utility
+value)</li>
+<li>I consider this topic to be one of my best subjects. (Perceived
+competence)</li>
+<li>I am not interested in this course. (Interest—reverse coded)</li>
+<li>I think I will like learning about this topic. (Interest)</li>
+<li>I think what we are studying in this course is useful for me to
+know. (Utility value)</li>
+<li>I don’t feel comfortable when it comes to answering questions in
+this area. (Perceived competence–reverse coded)</li>
+<li>I think this subject is interesting. (Interest)</li>
+<li>I find the content of this course to be personally meaningful.
+(Utility value)</li>
+<li>I’ve always wanted to learn more about this subject. (Interest)</li>
+</ol>
+<p>We will process the self-report items into three scales for</p>
+<ol style="list-style-type: decimal">
+<li>interest,</li>
+<li>perceived competence, and</li>
+<li>utility value.</li>
+</ol>
+<p>We do this by:</p>
+<ul>
+<li>Renaming the question variables to something more manageable</li>
+<li>Reversing the response scales on questions 4 and 7</li>
+<li>Categorizing each question into a measure</li>
+<li>Computing the mean of each measure</li>
+</ul>
+</div>
+<div id="rename-variables" class="section level3" number="2.3.2">
+<h3>
+<span class="header-section-number">2.3.2</span> Rename variables<a class="anchor" aria-label="anchor" href="#rename-variables"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pre_survey</span>  <span class="op">&lt;-</span>
+  <span class="va">pre_survey</span>  <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="co"># Rename the questions something easier to work with </span>
+  <span class="co"># because R is case sensitive</span>
+  <span class="co"># and working with variable names in mix case is prone to error</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>
+    q1 <span class="op">=</span> <span class="va">Q1MaincellgroupRow1</span>,
+    q2 <span class="op">=</span> <span class="va">Q1MaincellgroupRow2</span>,
+    q3 <span class="op">=</span> <span class="va">Q1MaincellgroupRow3</span>,
+    q4 <span class="op">=</span> <span class="va">Q1MaincellgroupRow4</span>,
+    q5 <span class="op">=</span> <span class="va">Q1MaincellgroupRow5</span>,
+    q6 <span class="op">=</span> <span class="va">Q1MaincellgroupRow6</span>,
+    q7 <span class="op">=</span> <span class="va">Q1MaincellgroupRow7</span>,
+    q8 <span class="op">=</span> <span class="va">Q1MaincellgroupRow8</span>,
+    q9 <span class="op">=</span> <span class="va">Q1MaincellgroupRow9</span>,
+    q10 <span class="op">=</span> <span class="va">Q1MaincellgroupRow10</span>
+  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  
+  <span class="co">## CONVERT ALL QUESTION RESPONSES TO NUMERIC </span>
+  
+  <span class="co">## a) The code line of the book</span>
+  <span class="co">## ~ (tilde) is an alternative for an anonymous function</span>
+  <span class="co">## . (dot) represents the (selected) columns</span>
+  <span class="co"># mutate_at(vars(q1:q10), list( ~ as.numeric(.))) ## WORKS!</span>
+  
+  
+  <span class="co">## Above line could be written without abbreviations</span>
+  <span class="co">## for more information see section on "Purr style formula"</span>
+  <span class="co">#  mutate_at(vars(q1:q10), list( function(x) as.numeric(x))) ## WORKS!</span>
+  
+  <span class="co">## b) mutate_at is # superseded by the use of across() in an existing verb</span>
+  <span class="co">## there are different options to apply across() using different selectors</span>
+
+  <span class="co">## b1)</span>
+  <span class="co"># mutate(across(num_range(prefix = "q", range = 1:10)), list( ~ as.numeric(.))) ## WORKS!</span>
+
+  <span class="co">## b2)</span>
+  <span class="co"># mutate(across(starts_with("q"), list( ~ as.numeric(.)))) ## WORKS!</span>
+
+  <span class="co">## b3)</span>
+  <span class="co">## mutate(across(q1:q10, list( ~ as.numeric(.)))) ## WORKS!</span>
+
+  <span class="co">## c) as across applies only to selected columns </span>
+  <span class="co">## it is not necessary to list all data frame columns</span>
+  <span class="co">## instead of using the above formula coding style</span>
+  <span class="co">## one could write the much simpler code line</span>
+
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="va">q1</span><span class="op">:</span><span class="va">q10</span>, <span class="va">as.numeric</span><span class="op">)</span><span class="op">)</span> <span class="co">## WORKS!</span>
+
+  <span class="co">## d) this means that even the original book line could be simplified</span>
+     <span class="co"># mutate_at(vars(q1:q10), as.numeric) ## WORKS!</span></code></pre></div>
+<p>The last line of this code chunk is of special interest for me. The book used <code>mutate_at(vars(q1:q10), list( ~ as.numeric(.)))</code>, which is problematic for two reasons:</p>
+<ul>
+<li>
+<code>mutate_at</code> is “superseded by the use of <code><a href="https://dplyr.tidyverse.org/reference/across.html">across()</a></code>” (from the help file). This also means that the <code>vars</code> function is also outdated as it was only needed for the scoped verbs (<code>_if</code>, <code>_at</code>, <code>_all</code>).</li>
+<li>
+<code>list( ~ as.numeric(.))</code> is pretty cryptic, especially for beginners. What does <code>~</code> (tilde) and <code>.</code> (dot) in this line mean?</li>
+</ul>
+<div id="introducing-across" class="section level4" number="2.3.2.1">
+<h4>
+<span class="header-section-number">2.3.2.1</span> Introducing <code>across()</code><a class="anchor" aria-label="anchor" href="#introducing-across"><i class="fas fa-link"></i></a>
+</h4>
+<p>The <a href="https://dplyr.tidyverse.org/articles/colwise.html">column-wise operations</a> vignette states under the header “Basic usage” that there are two primary arguments:</p>
+<blockquote>
+<ul>
+<li>The first argument, <code>.cols</code>, selects the columns you want to operate on. It uses tidy selection (like <a href="https://dplyr.tidyverse.org/reference/select.html">select()</a>) so you can pick variables by position, name, and type.</li>
+<li>The second argument, <code>.fns</code>, is a function or list of functions to apply to each column. This can also be a purrr style formula (or list of formulas) like <code>~ .x / 2</code>.</li>
+</ul>
+</blockquote>
+<p>This explanation needs some understanding otherwise it creates just more questions:</p>
+<ul>
+<li>What is tidy selection?</li>
+<li>What is a purrr style formula?</li>
+</ul>
+<div id="tidy-selection" class="section level5" number="2.3.2.1.1">
+<h5>
+<span class="header-section-number">2.3.2.1.1</span> Tidy selection<a class="anchor" aria-label="anchor" href="#tidy-selection"><i class="fas fa-link"></i></a>
+</h5>
+<p><strong>Tidy selection</strong> is a kind of mini language or R dialect to provide functions to select variables based on their names or properties. The <a href="https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html">selection language reference</a> provides a list of these modifiers and selection helpers. But it is important to know that these types of arguments <strong>only work in a selection context</strong>, e.g. in functions like <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code> or <code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">tidyr::pivot_longer()</a></code>. Using a selection helper anywhere else results in the error message: “Error: <helper function name> must be used within a <em>selecting</em> function. i See <a href="https://tidyselect.r-lib.org/reference/faq-selection-context.html" class="uri">https://tidyselect.r-lib.org/reference/faq-selection-context.html</a>.”</helper></p>
+<p>Here is an example of the error message:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"q"</span><span class="op">)</span></code></pre></div>
+<blockquote>
+<p>Error: <code><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with()</a></code> must be used within a <em>selecting</em> function.<br>
+ℹ See <a href="https://tidyselect.r-lib.org/reference/faq-selection-context.html" class="uri">https://tidyselect.r-lib.org/reference/faq-selection-context.html</a>.<br>
+Run <code><a href="https://rlang.r-lib.org/reference/last_error.html">rlang::last_error()</a></code> to see where the error occurred.</p>
+</blockquote>
+</div>
+<div id="purrr-style-formula" class="section level5" number="2.3.2.1.2">
+<h5>
+<span class="header-section-number">2.3.2.1.2</span> Purrr style formula<a class="anchor" aria-label="anchor" href="#purrr-style-formula"><i class="fas fa-link"></i></a>
+</h5>
+<p><a href="https://purrr.tidyverse.org/">Purrr</a> is a program package of the tidyverse containing tools for functional programming. As one important feature it includes a series of map-functions for iterations (loops). Another characteristic is that you can use it with vectors, functions and <strong>formulae</strong>. To tell R that you are using a formula (and not a variable) you have to use the tilde symbol <code>~</code>. There are three ways to refer to its arguments, allowing to create compact anonymous functions.</p>
+<blockquote>
+<ul>
+<li>For a single argument function, use <code>.</code>
+</li>
+<li>For a two argument function, use <code>.x</code> and <code>.y</code>
+</li>
+<li>For more arguments, use <code>..1</code>, <code>..2</code>, <code>..3</code> etc.</li>
+</ul>
+</blockquote>
+<p>In the book example is the tilde used as an anonymous function. This ca be seen when you replace the book code <code>list( ~ as.numeric(.))</code> with <code>list( function(x) as.numeric(x))</code>. This works as well as it is the same code only spelled out. (The <code><a href="https://rdrr.io/r/base/list.html">list()</a></code> function is necessary as the columns of the dataframe are returned as a list.)</p>
+</div>
+</div>
+<div id="advantages-of-across" class="section level4" number="2.3.2.2">
+<h4>
+<span class="header-section-number">2.3.2.2</span> Advantages of <code>across()</code><a class="anchor" aria-label="anchor" href="#advantages-of-across"><i class="fas fa-link"></i></a>
+</h4>
+<p>The <a href="https://dplyr.tidyverse.org/articles/colwise.html">column-wise operations</a> vignette mentions four advantages of <code><a href="https://dplyr.tidyverse.org/reference/across.html">across()</a></code>:</p>
+<ol style="list-style-type: decimal">
+<li>
+<code><a href="https://dplyr.tidyverse.org/reference/across.html">across()</a></code> applies a function (or functions) across multiple columns.</li>
+<li>
+<code><a href="https://dplyr.tidyverse.org/reference/across.html">across()</a></code> reduces the number of functions that <code>dplyr</code> needs to provide.</li>
+<li>
+<code><a href="https://dplyr.tidyverse.org/reference/across.html">across()</a></code> unifies <code>_if</code> and <code>_at</code> semantics so that you can select by position, name, and type in one line.</li>
+<li>
+<code><a href="https://dplyr.tidyverse.org/reference/across.html">across()</a></code> doesn’t need to use <code><a href="https://ggplot2.tidyverse.org/reference/vars.html">vars()</a></code>.</li>
+</ol>
+</div>
+<div id="convert-old-code" class="section level4" number="2.3.2.3">
+<h4>
+<span class="header-section-number">2.3.2.3</span> Convert old code<a class="anchor" aria-label="anchor" href="#convert-old-code"><i class="fas fa-link"></i></a>
+</h4>
+<p>The <a href="https://dplyr.tidyverse.org/articles/colwise.html">column-wise operations</a> vignette also gives some hints how to convert old code. It boils down to three rules:</p>
+<ol style="list-style-type: decimal">
+<li>Strip the <code>_if()</code>, <code>_at()</code> and <code>_all()</code> suffix off the function. For examle: Instead of <code>mutate_at(vars(q1:q10), list( ~ as.numeric(.)))</code> after stripping the <code>_at</code> we got the code line <code>mutate(vars(q1:q10), list( ~ as.numeric(.)))</code>.</li>
+<li>Call across(). The first argument will be:</li>
+</ol>
+<ul>
+<li>For _if(), the old second argument wrapped in where().</li>
+<li>For _at(), the old second argument, with the call to vars() removed.</li>
+<li>For _all(), everything().
+In our case we have to change <code>mutate(vars(q1:q10), list( ~ as.numeric(.)))</code> two fold: Inserting the across() call and deleting the <code><a href="https://ggplot2.tidyverse.org/reference/vars.html">vars()</a></code> part. Both steps are fulfilled in replacing <code>vars</code> with <code>across</code> so that we get: <code>mutate(across(q1:q10), list( ~ as.numeric(.))))</code>
+</li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>Additionally we could simplify the second part of the code line. Instead of using the more complex formula notation we can write <code>mutate(across(q1:q10), as.numeric)</code>
+</li>
+</ol>
+<div class="rmdimportant">
+<p>I am planning to write a PR for the <a href="https://github.com/data-edu/data-science-in-education">GitHub repo</a> with</p>
+<ul>
+<li>several typos and to propose to</li>
+<li>change <code><a href="https://dplyr.tidyverse.org/reference/mutate_all.html">mutate_at()</a></code> to <code><a href="https://dplyr.tidyverse.org/reference/across.html">across()</a></code>:</li>
+</ul>
+<p>It is not only the code, one must also change the explaining book text!</p>
+</div>
+</div>
+</div>
+<div id="reverse-scale" class="section level3" number="2.3.3">
+<h3>
+<span class="header-section-number">2.3.3</span> Reverse scale<a class="anchor" aria-label="anchor" href="#reverse-scale"><i class="fas fa-link"></i></a>
+</h3>
+<p>The scale of the survey responses on questions 4 and 7 must be reversed so the responses for all questions can be interpreted in the same way. As this is a common problem writing a function pays the effort.</p>
+<p>Here the <code><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when()</a></code> function is useful because it vectorises multiple <code><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else()</a></code> statements. The argument is sequence of a two-sided formula. The left hand side (LHS) determines which values match this case and must evaluate to a logical vector return either TRUE or FALSE. The right hand side (RHS) provides the replacement value.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># This part of the code is where we write the function:</span>
+<span class="co"># Function for reversing scales </span>
+<span class="va">reverse_scale</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">question</span><span class="op">)</span> <span class="op">{</span>
+  <span class="co"># Reverses the response scales for consistency</span>
+  <span class="co">#   Arguments:</span>
+  <span class="co">#     question - survey question</span>
+  <span class="co">#   Returns: </span>
+  <span class="co">#    a numeric converted response</span>
+  <span class="co"># Note: even though 3 is not transformed, case_when expects a match for all</span>
+  <span class="co"># possible conditions, so it's best practice to label each possible input</span>
+  <span class="co"># and use TRUE ~ as the final statement returning NA for unexpected inputs</span>
+  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span><span class="op">(</span>
+    <span class="va">question</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="fl">5</span>,
+    <span class="va">question</span> <span class="op">==</span> <span class="fl">2</span> <span class="op">~</span> <span class="fl">4</span>,
+    <span class="va">question</span> <span class="op">==</span> <span class="fl">3</span> <span class="op">~</span> <span class="fl">3</span>, 
+    <span class="va">question</span> <span class="op">==</span> <span class="fl">4</span> <span class="op">~</span> <span class="fl">2</span>,
+    <span class="va">question</span> <span class="op">==</span> <span class="fl">5</span> <span class="op">~</span> <span class="fl">1</span>,
+    <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_real_</span>
+  <span class="op">)</span>
+  <span class="va">x</span>
+<span class="op">}</span>
+
+<span class="co"># And here's where we use that function to reverse the scales</span>
+<span class="co"># We use the pipe operator %&gt;% here</span>
+<span class="co"># Reverse scale for questions 4 and 7</span>
+<span class="va">pre_survey</span> <span class="op">&lt;-</span>
+  <span class="va">pre_survey</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>q4 <span class="op">=</span> <span class="fu">reverse_scale</span><span class="op">(</span><span class="va">q4</span><span class="op">)</span>,
+         q7 <span class="op">=</span> <span class="fu">reverse_scale</span><span class="op">(</span><span class="va">q7</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="rmdnote">
+<p>It would be an interesting exercise to write a more general function:
+- working for likert scales with 5 and 7 levels
+- working for likert scales with a “forced option,” where the neutral option is removed. (See <a href="https://en.wikipedia.org/wiki/Likert_scale">Wikipedia on Likert scales</a>)</p>
+</div>
+</div>
+<div id="from-wide-to-long-format" class="section level3" number="2.3.4">
+<h3>
+<span class="header-section-number">2.3.4</span> From wide to long format<a class="anchor" aria-label="anchor" href="#from-wide-to-long-format"><i class="fas fa-link"></i></a>
+</h3>
+<p>To calculate — but also for visualizations — we need all answers of the same person in one column. This means to transform the pre_survey dataset from wide format to long format. Instead of having 1,102 observations of 12 variables, we will get 11,020 observations of 4 variables.</p>
+<p>Collecting all questions and answers under their respective headings we need to invent two names for the new columns. Appropriate names for the variables are <code>question</code> and <code>response</code>.</p>
+<p>To add in the future new variables to the dataset we will create a new object <code>measure mean</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Pivot the dataset from wide to long format</span>
+<span class="va">measure_mean</span> <span class="op">&lt;-</span>
+  <span class="va">pre_survey</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="co"># Gather questions and responses</span>
+  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="va">q1</span><span class="op">:</span><span class="va">q10</span>,
+               names_to <span class="op">=</span> <span class="st">"question"</span>,
+               values_to <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span>
+
+<span class="va">measure_mean</span>
+<span class="co">#&gt; # A tibble: 11,020 × 4</span>
+<span class="co">#&gt;    opdata_username opdata_CourseID question response</span>
+<span class="co">#&gt;    &lt;chr&gt;           &lt;chr&gt;           &lt;chr&gt;       &lt;dbl&gt;</span>
+<span class="co">#&gt;  1 _80624_1        FrScA-S116-01   q1              4</span>
+<span class="co">#&gt;  2 _80624_1        FrScA-S116-01   q2              4</span>
+<span class="co">#&gt;  3 _80624_1        FrScA-S116-01   q3              4</span>
+<span class="co">#&gt;  4 _80624_1        FrScA-S116-01   q4              5</span>
+<span class="co">#&gt;  5 _80624_1        FrScA-S116-01   q5              5</span>
+<span class="co">#&gt;  6 _80624_1        FrScA-S116-01   q6              4</span>
+<span class="co">#&gt;  7 _80624_1        FrScA-S116-01   q7              5</span>
+<span class="co">#&gt;  8 _80624_1        FrScA-S116-01   q8              5</span>
+<span class="co">#&gt;  9 _80624_1        FrScA-S116-01   q9              5</span>
+<span class="co">#&gt; 10 _80624_1        FrScA-S116-01   q10             5</span>
+<span class="co">#&gt; # … with 11,010 more rows</span></code></pre></div>
+</div>
+<div id="create-measure-column" class="section level3" number="2.3.5">
+<h3>
+<span class="header-section-number">2.3.5</span> Create measure column<a class="anchor" aria-label="anchor" href="#create-measure-column"><i class="fas fa-link"></i></a>
+</h3>
+<p>Next, we’ll take our new measure_mean dataset and create a column called <code>measure</code>. We’ll fill that column with one of three question categories:</p>
+<ul>
+<li>int: interest</li>
+<li>uv: utility value</li>
+<li>pc: perceived competence</li>
+</ul>
+<p>We will again use the <code><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when()</a></code> function. We ended up with one variable containing all possible question numbers (q1, q2, etc.). We will supply <code><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when()</a></code> with a list of all the question numbers that correspond to each category: interest, utility value, and perceived competence.</p>
+<ul>
+<li>
+<strong>interest</strong>: In the code below, we tell R to use questions 1, 4, 5, 8, and 10 to create the category <code>int</code>.</li>
+<li>
+<strong>utility value</strong>: We then tell R to use questions 2, 6, and 9 to calculate <code>uv</code>.</li>
+<li>
+<strong>perceived competence</strong>: We use the remaining questions 3 and 7 to calculate <code>pc</code>.</li>
+</ul>
+<p>To collect all values into a vector we use the function <code><a href="https://rdrr.io/r/base/c.html">c()</a></code> for “combine.”</p>
+<p>We’ll introduce a new operator in order to do this: <code>%in!%</code>. Practically, this operator means that R should look within a list for something.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Add measure variable </span>
+<span class="va">measure_mean_1</span> <span class="op">&lt;-</span> <span class="va">measure_mean</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
+  <span class="co"># Here's where we make the column of question categories called "measure"</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
+    measure <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span><span class="op">(</span>
+      <span class="va">question</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"q1"</span>, <span class="st">"q4"</span>, <span class="st">"q5"</span>, <span class="st">"q8"</span>, <span class="st">"q10"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"int"</span>,
+      <span class="va">question</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"q2"</span>, <span class="st">"q6"</span>, <span class="st">"q9"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"uv"</span>,
+      <span class="va">question</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"q3"</span>, <span class="st">"q7"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"pc"</span>,
+      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span><span class="op">)</span>
+  <span class="op">)</span>
+
+<span class="va">measure_mean_1</span>
+<span class="co">#&gt; # A tibble: 11,020 × 5</span>
+<span class="co">#&gt;    opdata_username opdata_CourseID question response measure</span>
+<span class="co">#&gt;    &lt;chr&gt;           &lt;chr&gt;           &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;  </span>
+<span class="co">#&gt;  1 _80624_1        FrScA-S116-01   q1              4 int    </span>
+<span class="co">#&gt;  2 _80624_1        FrScA-S116-01   q2              4 uv     </span>
+<span class="co">#&gt;  3 _80624_1        FrScA-S116-01   q3              4 pc     </span>
+<span class="co">#&gt;  4 _80624_1        FrScA-S116-01   q4              5 int    </span>
+<span class="co">#&gt;  5 _80624_1        FrScA-S116-01   q5              5 int    </span>
+<span class="co">#&gt;  6 _80624_1        FrScA-S116-01   q6              4 uv     </span>
+<span class="co">#&gt;  7 _80624_1        FrScA-S116-01   q7              5 pc     </span>
+<span class="co">#&gt;  8 _80624_1        FrScA-S116-01   q8              5 int    </span>
+<span class="co">#&gt;  9 _80624_1        FrScA-S116-01   q9              5 uv     </span>
+<span class="co">#&gt; 10 _80624_1        FrScA-S116-01   q10             5 int    </span>
+<span class="co">#&gt; # … with 11,010 more rows</span></code></pre></div>
+</div>
+<div id="add-measure-variable" class="section level3" number="2.3.6">
+<h3>
+<span class="header-section-number">2.3.6</span> Add measure variable<a class="anchor" aria-label="anchor" href="#add-measure-variable"><i class="fas fa-link"></i></a>
+</h3>
+<p>Finally we will create a new variable called <code>mean_response</code> that holds the means of our three categories <code>int</code>, <code>uv</code>, and <code>pc</code>. Since we are calculating the mean by category, we will need to first group the responses together using a function called <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code>. This function takes the data frame (or tibble) and converts it into a grouped tbl where operations are performed “by group.”</p>
+<p>If you want to go back to the original tibble, use <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup()</a></code> to remove the grouping.</p>
+<p>Next, we’ll use the function <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize()</a></code> to create two new variables: <code>mean_response</code> and <code>percent_NA</code>.</p>
+<p><code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize()</a></code> (or <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise()</a></code>) creates a new data frame. It will have one (or more) rows for each combination of grouping variables; if there are no grouping variables, the output will have a single row summarizing all observations in the input. It will contain one column for each grouping variable and one column for each of the summary statistics that you have specified.</p>
+<p>We’ll find the mean response of each category using the <code><a href="https://rdrr.io/r/base/mean.html">mean()</a></code> function. It is important to calculate the value without empty values (NA or not available values). With the argument <code>na.rm = TRUE</code> R calculates the mean after removing the NA values. (<code>na.rm</code> stands for “remove all NAs”).</p>
+<p>To detect if a cell or column contains NA’s one has to use the function <code><a href="https://rdrr.io/r/base/NA.html">is.na()</a></code>. Other test like <code>if response == NA</code> or <code>if response == "NA"</code> does not work!</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Add measure variable </span>
+<span class="va">measure_mean_2</span> <span class="op">&lt;-</span> <span class="va">measure_mean_1</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="co"># First, we group by the new variable "measure"</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">measure</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="co"># Here's where we compute the mean of the responses</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>
+    <span class="co"># Creating a new variable to indicate the mean response for each measure</span>
+    mean_response <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">response</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+    <span class="co"># Creating a new variable to indicate the percent of each measure that </span>
+    <span class="co"># had NAs in the response field</span>
+    percent_NA <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">response</span><span class="op">)</span><span class="op">)</span>
+    <span class="op">)</span>
+
+<span class="va">measure_mean_2</span>
+<span class="co">#&gt; # A tibble: 3 × 3</span>
+<span class="co">#&gt;   measure mean_response percent_NA</span>
+<span class="co">#&gt;   &lt;chr&gt;           &lt;dbl&gt;      &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 int              4.25      0.178</span>
+<span class="co">#&gt; 2 pc               3.65      0.178</span>
+<span class="co">#&gt; 3 uv               3.74      0.178</span></code></pre></div>
+</div>
+</div>
+<div id="process-course-cata" class="section level2" number="2.4">
+<h2>
+<span class="header-section-number">2.4</span> Process course cata<a class="anchor" aria-label="anchor" href="#process-course-cata"><i class="fas fa-link"></i></a>
+</h2>
+<div id="inspect-data-1" class="section level3" number="2.4.1">
+<h3>
+<span class="header-section-number">2.4.1</span> Inspect data<a class="anchor" aria-label="anchor" href="#inspect-data-1"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Gradebook and log-trace data for F15 and S16 semesters</span>
+<span class="va">course_data</span> <span class="op">&lt;-</span> <span class="fu">dataedu</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/dataedu/man/course_data.html">course_data</a></span>
+
+<span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">course_data</span><span class="op">)</span>
+<span class="co">#&gt; Rows: 29,711</span>
+<span class="co">#&gt; Columns: 8</span>
+<span class="co">#&gt; $ CourseSectionOrigID &lt;chr&gt; "AnPhA-S116-01", "AnPhA-S116-01", "AnPhA…</span>
+<span class="co">#&gt; $ Bb_UserPK           &lt;dbl&gt; 60186, 60186, 60186, 60186, 60186, 60186…</span>
+<span class="co">#&gt; $ Gradebook_Item      &lt;chr&gt; "POINTS EARNED &amp; TOTAL COURSE POINTS", "…</span>
+<span class="co">#&gt; $ Grade_Category      &lt;chr&gt; NA, NA, NA, "Hw", "Hw", "Qz", "Qz", "Hw"…</span>
+<span class="co">#&gt; $ FinalGradeCEMS      &lt;dbl&gt; 86.272, 86.272, 86.272, 86.272, 86.272, …</span>
+<span class="co">#&gt; $ Points_Possible     &lt;dbl&gt; 5, 30, 105, 140, 5, 5, 20, 50, 10, 50, 5…</span>
+<span class="co">#&gt; $ Points_Earned       &lt;dbl&gt; 4.050, 24.000, 71.675, 140.970, 5.000, 4…</span>
+<span class="co">#&gt; $ Gender              &lt;chr&gt; "F", "F", "F", "F", "M", "F", "F", "F", …</span></code></pre></div>
+<p>There are many gradebook items per course and student generated by the learning management system.</p>
+<p>The column <code>CourseSectionOrigID</code> combines information about course subject, semester, and section. This is not a tidy format where each variable has its own column. Only if every different type of information hat its own column we can use efficiently these data.</p>
+</div>
+<div id="separate-data" class="section level3" number="2.4.2">
+<h3>
+<span class="header-section-number">2.4.2</span> Separate data<a class="anchor" aria-label="anchor" href="#separate-data"><i class="fas fa-link"></i></a>
+</h3>
+<p>We therefore have to separate these kinds of information by using the function <code><a href="https://tidyr.tidyverse.org/reference/separate.html">separate()</a></code>. Below, we will load course_data and run the <code><a href="https://tidyr.tidyverse.org/reference/separate.html">separate()</a></code> function to split up the subject, semester, and section so we can use them later on. We will keep for further reference the original column.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># split course section into components</span>
+<span class="va">course_data</span> <span class="op">&lt;-</span> 
+  <span class="va">course_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="co"># Give course subject, semester, and section their own columns</span>
+  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate.html">separate</a></span><span class="op">(</span>
+    col <span class="op">=</span> <span class="va">CourseSectionOrigID</span>,
+    into <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"subject"</span>, <span class="st">"semester"</span>, <span class="st">"section"</span><span class="op">)</span>,
+    sep <span class="op">=</span> <span class="st">"-"</span>,
+    remove <span class="op">=</span> <span class="cn">FALSE</span>
+  <span class="op">)</span></code></pre></div>
+</div>
+<div id="join-data" class="section level3" number="2.4.3">
+<h3>
+<span class="header-section-number">2.4.3</span> Join data<a class="anchor" aria-label="anchor" href="#join-data"><i class="fas fa-link"></i></a>
+</h3>
+<p>The pre_survey and course_data datasets are referring to the same courses. <code>Opdata_courseID</code> (pre_survey dataset) and <code>CourseSectionOrigID</code> (course_data dataset) have the same identifiers. To join both datasets we need a column with the same name and same values (<strong>keys</strong>) in both tibbles. Instead to rename just one of these columns we take the occasion and clean up the name of both. One variable will correspond to the course, and the other will correspond to the student.</p>
+<div id="create-keys" class="section level4" number="2.4.3.1">
+<h4>
+<span class="header-section-number">2.4.3.1</span> Create keys<a class="anchor" aria-label="anchor" href="#create-keys"><i class="fas fa-link"></i></a>
+</h4>
+<p>We will rename <code>opdata_username</code> and <code>opdata_CourseID</code> to be <code>student_id</code> and <code>course_id</code>, respectively. (In the book there is in the text mentioned with <code>RespondentID</code> a wrong column name. But the code is correct.)</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pre_survey</span> <span class="op">&lt;-</span>
+  <span class="va">pre_survey</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>student_id <span class="op">=</span> <span class="va">opdata_username</span>,
+         course_id <span class="op">=</span> <span class="va">opdata_CourseID</span><span class="op">)</span>
+
+<span class="va">pre_survey</span>
+<span class="co">#&gt; # A tibble: 1,102 × 12</span>
+<span class="co">#&gt;    student_id course_id        q1    q2    q3    q4    q5    q6    q7</span>
+<span class="co">#&gt;    &lt;chr&gt;      &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt;  1 _80624_1   FrScA-S116-01     4     4     4     5     5     4     5</span>
+<span class="co">#&gt;  2 _80623_1   BioA-S116-01      4     4     3     4     4     4     4</span>
+<span class="co">#&gt;  3 _82588_1   OcnA-S116-03     NA    NA    NA    NA    NA    NA    NA</span>
+<span class="co">#&gt;  4 _80623_1   AnPhA-S116-01     4     3     3     4     3     3     3</span>
+<span class="co">#&gt;  5 _80624_1   AnPhA-S116-01    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="co">#&gt;  6 _80624_1   AnPhA-S116-02     4     2     2     4     4     4     5</span>
+<span class="co">#&gt;  7 _80624_1   AnPhA-T116-01    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="co">#&gt;  8 _80624_1   BioA-S116-01      5     3     3     5     5     4     5</span>
+<span class="co">#&gt;  9 _80624_1   BioA-T116-01     NA    NA    NA    NA    NA    NA    NA</span>
+<span class="co">#&gt; 10 _80624_1   PhysA-S116-01     4     4     3     4     4     4     4</span>
+<span class="co">#&gt; # … with 1,092 more rows, and 3 more variables: q8 &lt;dbl&gt;, q9 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   q10 &lt;dbl&gt;</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">course_data</span> <span class="op">&lt;-</span>
+  <span class="va">course_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>student_id <span class="op">=</span> <span class="va">Bb_UserPK</span>,
+         course_id <span class="op">=</span> <span class="va">CourseSectionOrigID</span><span class="op">)</span>
+
+<span class="va">course_data</span>
+<span class="co">#&gt; # A tibble: 29,711 × 11</span>
+<span class="co">#&gt;    course_id     subject semester section student_id Gradebook_Item   </span>
+<span class="co">#&gt;    &lt;chr&gt;         &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;        &lt;dbl&gt; &lt;chr&gt;            </span>
+<span class="co">#&gt;  1 AnPhA-S116-01 AnPhA   S116     01           60186 POINTS EARNED &amp; …</span>
+<span class="co">#&gt;  2 AnPhA-S116-01 AnPhA   S116     01           60186 WORK ATTEMPTED   </span>
+<span class="co">#&gt;  3 AnPhA-S116-01 AnPhA   S116     01           60186 0.1: Message You…</span>
+<span class="co">#&gt;  4 AnPhA-S116-01 AnPhA   S116     01           60186 0.2: Intro Assig…</span>
+<span class="co">#&gt;  5 AnPhA-S116-01 AnPhA   S116     01           60186 0.3: Intro Assig…</span>
+<span class="co">#&gt;  6 AnPhA-S116-01 AnPhA   S116     01           60186 1.1: Quiz        </span>
+<span class="co">#&gt;  7 AnPhA-S116-01 AnPhA   S116     01           60186 1.2: Quiz        </span>
+<span class="co">#&gt;  8 AnPhA-S116-01 AnPhA   S116     01           60186 1.3: Create a Li…</span>
+<span class="co">#&gt;  9 AnPhA-S116-01 AnPhA   S116     01           60186 1.3: Create a Li…</span>
+<span class="co">#&gt; 10 AnPhA-S116-01 AnPhA   S116     01           60186 1.4: Negative Fe…</span>
+<span class="co">#&gt; # … with 29,701 more rows, and 5 more variables:</span>
+<span class="co">#&gt; #   Grade_Category &lt;chr&gt;, FinalGradeCEMS &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   Points_Possible &lt;dbl&gt;, Points_Earned &lt;dbl&gt;, Gender &lt;chr&gt;</span></code></pre></div>
+</div>
+<div id="subtract-data" class="section level4" number="2.4.3.2">
+<h4>
+<span class="header-section-number">2.4.3.2</span> Subtract data<a class="anchor" aria-label="anchor" href="#subtract-data"><i class="fas fa-link"></i></a>
+</h4>
+<p>We have now with <code>course_id</code> and <code>student_id</code> better variable names as before. But by inspecting the resulting data we see that there is still another problem: For whatever reason the <code>pre_survey</code> has <code>_80624_1</code> as <code>student_id</code> instead just the five characters between the underscores (e.g., <code>80624</code>). So we need to extract respectively subtract these five characters between the underscore (_) symbols.</p>
+<div class="rmdcaution">
+<p>Student IDs are character strings even if they consists of numbers. Why? It doesn’t make sense to use them for calculations. Quite the contrary! It would be an error with fatal consequences to use it as a number. To prevent this mistake it is a measure of precaution to change their data type to character (or factor).</p>
+<p>The book goes the other direction: In order to match both variable types it converts the character strings to a numbers. I would recommend the reverse procedure: To convert the number type of <code>student_id</code> in <code>course_data</code> into a character type.</p>
+</div>
+<p>To extract the five characters between the underscore we are going to use the function <code><a href="https://stringr.tidyverse.org/reference/str_sub.html">str_sub()</a></code> form the {stringr} package, another package from the {tidyverse}. The syntax is the following one:</p>
+<p><code>str_sub(string, start = 1L, end = -1L)</code></p>
+<blockquote>
+<p><code>start</code> gives the position of the first character (defaults to first), <code>end</code> gives the position of the last (defaults to last character). Negative values count backwards from the last character.</p>
+</blockquote>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Re-create the variable "student_id" so that it excludes the extraneous characters</span>
+<span class="va">pre_survey</span> <span class="op">&lt;-</span> <span class="va">pre_survey</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>student_id <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_sub.html">str_sub</a></span><span class="op">(</span><span class="va">student_id</span>, start <span class="op">=</span> <span class="fl">2</span>, end <span class="op">=</span> <span class="op">-</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co"># Save "student_id" as a character string so that it matches with `pre_survey` </span>
+<span class="va">course_data</span> <span class="op">&lt;-</span>  <span class="va">course_data</span> |&gt; 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>student_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">student_id</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="left_join" class="section level4" number="2.4.3.3">
+<h4>
+<span class="header-section-number">2.4.3.3</span> <code>left_join()</code><a class="anchor" aria-label="anchor" href="#left_join"><i class="fas fa-link"></i></a>
+</h4>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">dat</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">course_data</span>, <span class="va">pre_survey</span>,
+            by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"student_id"</span>, <span class="st">"course_id"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">dat</span>
+<span class="co">#&gt; # A tibble: 40,348 × 21</span>
+<span class="co">#&gt;    course_id     subject semester section student_id Gradebook_Item   </span>
+<span class="co">#&gt;    &lt;chr&gt;         &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;            </span>
+<span class="co">#&gt;  1 AnPhA-S116-01 AnPhA   S116     01      60186      POINTS EARNED &amp; …</span>
+<span class="co">#&gt;  2 AnPhA-S116-01 AnPhA   S116     01      60186      WORK ATTEMPTED   </span>
+<span class="co">#&gt;  3 AnPhA-S116-01 AnPhA   S116     01      60186      0.1: Message You…</span>
+<span class="co">#&gt;  4 AnPhA-S116-01 AnPhA   S116     01      60186      0.2: Intro Assig…</span>
+<span class="co">#&gt;  5 AnPhA-S116-01 AnPhA   S116     01      60186      0.3: Intro Assig…</span>
+<span class="co">#&gt;  6 AnPhA-S116-01 AnPhA   S116     01      60186      1.1: Quiz        </span>
+<span class="co">#&gt;  7 AnPhA-S116-01 AnPhA   S116     01      60186      1.2: Quiz        </span>
+<span class="co">#&gt;  8 AnPhA-S116-01 AnPhA   S116     01      60186      1.3: Create a Li…</span>
+<span class="co">#&gt;  9 AnPhA-S116-01 AnPhA   S116     01      60186      1.3: Create a Li…</span>
+<span class="co">#&gt; 10 AnPhA-S116-01 AnPhA   S116     01      60186      1.4: Negative Fe…</span>
+<span class="co">#&gt; # … with 40,338 more rows, and 15 more variables:</span>
+<span class="co">#&gt; #   Grade_Category &lt;chr&gt;, FinalGradeCEMS &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   Points_Possible &lt;dbl&gt;, Points_Earned &lt;dbl&gt;, Gender &lt;chr&gt;,</span>
+<span class="co">#&gt; #   q1 &lt;dbl&gt;, q2 &lt;dbl&gt;, q3 &lt;dbl&gt;, q4 &lt;dbl&gt;, q5 &lt;dbl&gt;, q6 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   q7 &lt;dbl&gt;, q8 &lt;dbl&gt;, q9 &lt;dbl&gt;, q10 &lt;dbl&gt;</span></code></pre></div>
+<p>This is a surprising result for me. course_data has 29711 and pre_survey has 1102 observation. So I thought the left join would result in maximal 29711 + 1102 = 30813 row.But we have about 10000 more row. Why is this the case?</p>
+<p>I think it has something to do that there is not just one unique identifier. The code applies two keys column for the join and both datasets have many duplicates in both key columns.</p>
+<p>To check my assumption is very difficult with these enormous datasets. I would need toy datasets to check my hunch.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Dataset of students</span>
+<span class="va">df1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>
+  subject <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"X"</span>, <span class="st">"X"</span>, <span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"b"</span>, <span class="st">"b"</span>, <span class="st">"b"</span>, <span class="st">"b"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span><span class="op">)</span>,
+  student <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">7</span>,<span class="fl">1</span>,<span class="fl">8</span><span class="op">)</span>,
+  grade_SS <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">1</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">3</span>,<span class="fl">1</span>,<span class="fl">5</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span>
+<span class="op">)</span>
+
+<span class="va">df2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>
+  subject <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"b"</span>, <span class="st">"b"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span><span class="op">)</span>,
+  student <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span>,<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span>,<span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>,
+  grade_WS <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">1</span>,<span class="fl">3</span>,<span class="fl">3</span>,<span class="fl">1</span>,<span class="fl">5</span>,<span class="fl">3</span>,<span class="fl">3</span><span class="op">)</span>
+<span class="op">)</span>
+
+<span class="va">df_left</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">df1</span>, <span class="va">df2</span>,
+            by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"subject"</span>, <span class="st">"student"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">df_left</span>
+<span class="co">#&gt; # A tibble: 14 × 4</span>
+<span class="co">#&gt;    subject student grade_SS grade_WS</span>
+<span class="co">#&gt;    &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;</span>
+<span class="co">#&gt;  1 X             1        3       NA</span>
+<span class="co">#&gt;  2 X             2        2       NA</span>
+<span class="co">#&gt;  3 a             3        1        1</span>
+<span class="co">#&gt;  4 a             4        4        4</span>
+<span class="co">#&gt;  5 a             5        5        5</span>
+<span class="co">#&gt;  6 a             6        1        1</span>
+<span class="co">#&gt;  7 b             1        2       NA</span>
+<span class="co">#&gt;  8 b             2        2       NA</span>
+<span class="co">#&gt;  9 b             3        3        3</span>
+<span class="co">#&gt; 10 b             4        3        3</span>
+<span class="co">#&gt; 11 b             5        1        1</span>
+<span class="co">#&gt; 12 b             7        5       NA</span>
+<span class="co">#&gt; 13 c             1        2        3</span>
+<span class="co">#&gt; 14 c             8        2       NA</span></code></pre></div>
+</div>
+<div id="semi_join" class="section level4" number="2.4.3.4">
+<h4>
+<span class="header-section-number">2.4.3.4</span> <code>semi_join()</code><a class="anchor" aria-label="anchor" href="#semi_join"><i class="fas fa-link"></i></a>
+</h4>
+<p><code><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">semi_join()</a></code> joins and retains all of the matching rows in the “left” and “right” data frame. This is useful when you are only interested in keeping the rows (or cases/observations) that are able to be joined. <code><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">semi_join()</a></code> will not create duplicate rows of the left data frame, even when it finds multiple matches on the right data frame. It will also keep only the columns from the left data frame.</p>
+<p>For example, the following returns only the rows that are present in both course_data and pre_survey:</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">dat_semi</span> <span class="op">&lt;-</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">semi_join</a></span><span class="op">(</span><span class="va">course_data</span>,
+            <span class="va">pre_survey</span>,
+            by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"student_id"</span>, <span class="st">"course_id"</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">dat_semi</span>
+<span class="co">#&gt; # A tibble: 28,655 × 11</span>
+<span class="co">#&gt;    course_id     subject semester section student_id Gradebook_Item   </span>
+<span class="co">#&gt;    &lt;chr&gt;         &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;            </span>
+<span class="co">#&gt;  1 AnPhA-S116-01 AnPhA   S116     01      60186      POINTS EARNED &amp; …</span>
+<span class="co">#&gt;  2 AnPhA-S116-01 AnPhA   S116     01      60186      WORK ATTEMPTED   </span>
+<span class="co">#&gt;  3 AnPhA-S116-01 AnPhA   S116     01      60186      0.1: Message You…</span>
+<span class="co">#&gt;  4 AnPhA-S116-01 AnPhA   S116     01      60186      0.2: Intro Assig…</span>
+<span class="co">#&gt;  5 AnPhA-S116-01 AnPhA   S116     01      60186      0.3: Intro Assig…</span>
+<span class="co">#&gt;  6 AnPhA-S116-01 AnPhA   S116     01      60186      1.1: Quiz        </span>
+<span class="co">#&gt;  7 AnPhA-S116-01 AnPhA   S116     01      60186      1.2: Quiz        </span>
+<span class="co">#&gt;  8 AnPhA-S116-01 AnPhA   S116     01      60186      1.3: Create a Li…</span>
+<span class="co">#&gt;  9 AnPhA-S116-01 AnPhA   S116     01      60186      1.3: Create a Li…</span>
+<span class="co">#&gt; 10 AnPhA-S116-01 AnPhA   S116     01      60186      1.4: Negative Fe…</span>
+<span class="co">#&gt; # … with 28,645 more rows, and 5 more variables:</span>
+<span class="co">#&gt; #   Grade_Category &lt;chr&gt;, FinalGradeCEMS &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   Points_Possible &lt;dbl&gt;, Points_Earned &lt;dbl&gt;, Gender &lt;chr&gt;</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">dat_semi2</span> <span class="op">&lt;-</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">semi_join</a></span><span class="op">(</span><span class="va">pre_survey</span>,
+            <span class="va">course_data</span>,
+            by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"course_id"</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">dat_semi2</span>
+<span class="co">#&gt; # A tibble: 1,072 × 12</span>
+<span class="co">#&gt;    student_id course_id        q1    q2    q3    q4    q5    q6    q7</span>
+<span class="co">#&gt;    &lt;chr&gt;      &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt;  1 80624      FrScA-S116-01     4     4     4     5     5     4     5</span>
+<span class="co">#&gt;  2 80623      BioA-S116-01      4     4     3     4     4     4     4</span>
+<span class="co">#&gt;  3 82588      OcnA-S116-03     NA    NA    NA    NA    NA    NA    NA</span>
+<span class="co">#&gt;  4 80623      AnPhA-S116-01     4     3     3     4     3     3     3</span>
+<span class="co">#&gt;  5 80624      AnPhA-S116-01    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="co">#&gt;  6 80624      AnPhA-S116-02     4     2     2     4     4     4     5</span>
+<span class="co">#&gt;  7 80624      AnPhA-T116-01    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="co">#&gt;  8 80624      BioA-S116-01      5     3     3     5     5     4     5</span>
+<span class="co">#&gt;  9 80624      BioA-T116-01     NA    NA    NA    NA    NA    NA    NA</span>
+<span class="co">#&gt; 10 80624      PhysA-S116-01     4     4     3     4     4     4     4</span>
+<span class="co">#&gt; # … with 1,062 more rows, and 3 more variables: q8 &lt;dbl&gt;, q9 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   q10 &lt;dbl&gt;</span></code></pre></div>
+</div>
+<div id="anti-join" class="section level4" number="2.4.3.5">
+<h4>
+<span class="header-section-number">2.4.3.5</span> <code>anti-join()</code><a class="anchor" aria-label="anchor" href="#anti-join"><i class="fas fa-link"></i></a>
+</h4>
+<p><code><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">anti_join()</a></code> removes all of the rows in the “left” data frame that can be joined with those in the “right” data frame.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">dat_anti</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">anti_join</a></span><span class="op">(</span><span class="va">course_data</span>,
+            <span class="va">pre_survey</span>,
+            by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"student_id"</span>, <span class="st">"course_id"</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">dat_anti</span>
+<span class="co">#&gt; # A tibble: 1,056 × 11</span>
+<span class="co">#&gt;    course_id     subject semester section student_id Gradebook_Item   </span>
+<span class="co">#&gt;    &lt;chr&gt;         &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;            </span>
+<span class="co">#&gt;  1 AnPhA-S116-01 AnPhA   S116     01      85865      POINTS EARNED &amp; …</span>
+<span class="co">#&gt;  2 AnPhA-S116-01 AnPhA   S116     01      85865      WORK ATTEMPTED   </span>
+<span class="co">#&gt;  3 AnPhA-S116-01 AnPhA   S116     01      85865      0.1: Message You…</span>
+<span class="co">#&gt;  4 AnPhA-S116-01 AnPhA   S116     01      85865      0.2: Intro Assig…</span>
+<span class="co">#&gt;  5 AnPhA-S116-01 AnPhA   S116     01      85865      0.3: Intro Assig…</span>
+<span class="co">#&gt;  6 AnPhA-S116-01 AnPhA   S116     01      85865      1.1: Quiz        </span>
+<span class="co">#&gt;  7 AnPhA-S116-01 AnPhA   S116     01      85865      1.2: Quiz        </span>
+<span class="co">#&gt;  8 AnPhA-S116-01 AnPhA   S116     01      85865      1.3: Create a Li…</span>
+<span class="co">#&gt;  9 AnPhA-S116-01 AnPhA   S116     01      85865      1.3: Create a Li…</span>
+<span class="co">#&gt; 10 AnPhA-S116-01 AnPhA   S116     01      85865      1.4: Negative Fe…</span>
+<span class="co">#&gt; # … with 1,046 more rows, and 5 more variables: Grade_Category &lt;chr&gt;,</span>
+<span class="co">#&gt; #   FinalGradeCEMS &lt;dbl&gt;, Points_Possible &lt;dbl&gt;, Points_Earned &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   Gender &lt;chr&gt;</span></code></pre></div>
+</div>
+<div id="right_join" class="section level4" number="2.4.3.6">
+<h4>
+<span class="header-section-number">2.4.3.6</span> <code>right_join()</code><a class="anchor" aria-label="anchor" href="#right_join"><i class="fas fa-link"></i></a>
+</h4>
+<p>Perhaps the least helpful of the three, <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">right_join()</a></code>, works the same as <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join()</a></code>, but by retaining all of the rows in the “right” data frame, and joining matching rows in the “left” data frame (so, the opposite of <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join()</a></code>).</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">dat_right</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">right_join</a></span><span class="op">(</span><span class="va">course_data</span>,
+             <span class="va">pre_survey</span>,
+             by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"student_id"</span>, <span class="st">"course_id"</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">dat_right</span>
+<span class="co">#&gt; # A tibble: 39,593 × 21</span>
+<span class="co">#&gt;    course_id     subject semester section student_id Gradebook_Item   </span>
+<span class="co">#&gt;    &lt;chr&gt;         &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;            </span>
+<span class="co">#&gt;  1 AnPhA-S116-01 AnPhA   S116     01      60186      POINTS EARNED &amp; …</span>
+<span class="co">#&gt;  2 AnPhA-S116-01 AnPhA   S116     01      60186      WORK ATTEMPTED   </span>
+<span class="co">#&gt;  3 AnPhA-S116-01 AnPhA   S116     01      60186      0.1: Message You…</span>
+<span class="co">#&gt;  4 AnPhA-S116-01 AnPhA   S116     01      60186      0.2: Intro Assig…</span>
+<span class="co">#&gt;  5 AnPhA-S116-01 AnPhA   S116     01      60186      0.3: Intro Assig…</span>
+<span class="co">#&gt;  6 AnPhA-S116-01 AnPhA   S116     01      60186      1.1: Quiz        </span>
+<span class="co">#&gt;  7 AnPhA-S116-01 AnPhA   S116     01      60186      1.2: Quiz        </span>
+<span class="co">#&gt;  8 AnPhA-S116-01 AnPhA   S116     01      60186      1.3: Create a Li…</span>
+<span class="co">#&gt;  9 AnPhA-S116-01 AnPhA   S116     01      60186      1.3: Create a Li…</span>
+<span class="co">#&gt; 10 AnPhA-S116-01 AnPhA   S116     01      60186      1.4: Negative Fe…</span>
+<span class="co">#&gt; # … with 39,583 more rows, and 15 more variables:</span>
+<span class="co">#&gt; #   Grade_Category &lt;chr&gt;, FinalGradeCEMS &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   Points_Possible &lt;dbl&gt;, Points_Earned &lt;dbl&gt;, Gender &lt;chr&gt;,</span>
+<span class="co">#&gt; #   q1 &lt;dbl&gt;, q2 &lt;dbl&gt;, q3 &lt;dbl&gt;, q4 &lt;dbl&gt;, q5 &lt;dbl&gt;, q6 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   q7 &lt;dbl&gt;, q8 &lt;dbl&gt;, q9 &lt;dbl&gt;, q10 &lt;dbl&gt;</span></code></pre></div>
+<p>If we wanted this to return exactly the same output as <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join()</a></code> (and, in doing so, to create a data frame that is identical to the <code>dat</code> data frame we created above), we could simply switch the order of the two data frames to be the opposite of those used for the <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join()</a></code> above:</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">dat_right</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">right_join</a></span><span class="op">(</span><span class="va">pre_survey</span>,
+            <span class="va">course_data</span>,
+            by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"student_id"</span>, <span class="st">"course_id"</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">dat_right</span>
+<span class="co">#&gt; # A tibble: 40,348 × 21</span>
+<span class="co">#&gt;    student_id course_id        q1    q2    q3    q4    q5    q6    q7</span>
+<span class="co">#&gt;    &lt;chr&gt;      &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt;  1 85791      FrScA-S116-01     3     3     3     3     4     3     3</span>
+<span class="co">#&gt;  2 85791      FrScA-S116-01     3     3     3     3     4     3     3</span>
+<span class="co">#&gt;  3 85791      FrScA-S116-01     3     3     3     3     4     3     3</span>
+<span class="co">#&gt;  4 85791      FrScA-S116-01     3     3     3     3     4     3     3</span>
+<span class="co">#&gt;  5 85791      FrScA-S116-01     3     3     3     3     4     3     3</span>
+<span class="co">#&gt;  6 85791      FrScA-S116-01     3     3     3     3     4     3     3</span>
+<span class="co">#&gt;  7 85791      FrScA-S116-01     3     3     3     3     4     3     3</span>
+<span class="co">#&gt;  8 85791      FrScA-S116-01     3     3     3     3     4     3     3</span>
+<span class="co">#&gt;  9 85791      FrScA-S116-01     3     3     3     3     4     3     3</span>
+<span class="co">#&gt; 10 85791      FrScA-S116-01     3     3     3     3     4     3     3</span>
+<span class="co">#&gt; # … with 40,338 more rows, and 12 more variables: q8 &lt;dbl&gt;, q9 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   q10 &lt;dbl&gt;, subject &lt;chr&gt;, semester &lt;chr&gt;, section &lt;chr&gt;,</span>
+<span class="co">#&gt; #   Gradebook_Item &lt;chr&gt;, Grade_Category &lt;chr&gt;, FinalGradeCEMS &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   Points_Possible &lt;dbl&gt;, Points_Earned &lt;dbl&gt;, Gender &lt;chr&gt;</span></code></pre></div>
+</div>
+<div id="join-course_minutes" class="section level4" number="2.4.3.7">
+<h4>
+<span class="header-section-number">2.4.3.7</span> Join course_minutes<a class="anchor" aria-label="anchor" href="#join-course_minutes"><i class="fas fa-link"></i></a>
+</h4>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Log-trace data for F15 and S16 semesters - this is for time spent</span>
+<span class="va">course_minutes</span> <span class="op">&lt;-</span> <span class="fu">dataedu</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/dataedu/man/course_minutes.html">course_minutes</a></span>
+<span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">course_minutes</span><span class="op">)</span>
+<span class="co">#&gt; Rows: 598</span>
+<span class="co">#&gt; Columns: 3</span>
+<span class="co">#&gt; $ Bb_UserPK           &lt;dbl&gt; 44638, 54346, 57981, 66740, 67920, 85355…</span>
+<span class="co">#&gt; $ CourseSectionOrigID &lt;chr&gt; "OcnA-S116-01", "OcnA-S116-01", "OcnA-S1…</span>
+<span class="co">#&gt; $ TimeSpent           &lt;dbl&gt; 1382.7001, 1191.3836, 3343.3333, 965.299…</span></code></pre></div>
+<p>We will rename the necessary variables in that dataset so that it is ready to merge. Then, we will merge the course_minutes dataset and its newly renamed variables <code>student_id</code> and <code>course_id</code> with our <code>dat</code> dataset.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">course_minutes</span> <span class="op">&lt;-</span>
+  <span class="va">course_minutes</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>student_id <span class="op">=</span> <span class="va">Bb_UserPK</span>,
+         course_id <span class="op">=</span> <span class="va">CourseSectionOrigID</span><span class="op">)</span>
+
+
+
+<span class="co">## I have set data type of student_id to character</span>
+<span class="co">## So I do not change the double typeto integer  but to character!</span>
+
+<span class="va">course_minutes</span> <span class="op">&lt;-</span>
+  <span class="va">course_minutes</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="co"># Change the data type for student_id in course_minutes so we can match to</span>
+  <span class="co"># student_id in dat</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>student_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">student_id</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">dat</span> <span class="op">&lt;-</span> 
+  <span class="va">dat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">course_minutes</span>, 
+            by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"student_id"</span>, <span class="st">"course_id"</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>
+<span class="co">#&gt; Rows: 40,348</span>
+<span class="co">#&gt; Columns: 22</span>
+<span class="co">#&gt; $ course_id       &lt;chr&gt; "AnPhA-S116-01", "AnPhA-S116-01", "AnPhA-S11…</span>
+<span class="co">#&gt; $ subject         &lt;chr&gt; "AnPhA", "AnPhA", "AnPhA", "AnPhA", "AnPhA",…</span>
+<span class="co">#&gt; $ semester        &lt;chr&gt; "S116", "S116", "S116", "S116", "S116", "S11…</span>
+<span class="co">#&gt; $ section         &lt;chr&gt; "01", "01", "01", "01", "01", "01", "01", "0…</span>
+<span class="co">#&gt; $ student_id      &lt;chr&gt; "60186", "60186", "60186", "60186", "60186",…</span>
+<span class="co">#&gt; $ Gradebook_Item  &lt;chr&gt; "POINTS EARNED &amp; TOTAL COURSE POINTS", "WORK…</span>
+<span class="co">#&gt; $ Grade_Category  &lt;chr&gt; NA, NA, NA, "Hw", "Hw", "Qz", "Qz", "Hw", "H…</span>
+<span class="co">#&gt; $ FinalGradeCEMS  &lt;dbl&gt; 86.272, 86.272, 86.272, 86.272, 86.272, 86.2…</span>
+<span class="co">#&gt; $ Points_Possible &lt;dbl&gt; 5, 30, 105, 140, 5, 5, 20, 50, 10, 50, 5, 5,…</span>
+<span class="co">#&gt; $ Points_Earned   &lt;dbl&gt; 4.050, 24.000, 71.675, 140.970, 5.000, 4.000…</span>
+<span class="co">#&gt; $ Gender          &lt;chr&gt; "F", "F", "F", "F", "M", "F", "F", "F", "F",…</span>
+<span class="co">#&gt; $ q1              &lt;dbl&gt; 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,…</span>
+<span class="co">#&gt; $ q2              &lt;dbl&gt; 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,…</span>
+<span class="co">#&gt; $ q3              &lt;dbl&gt; 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,…</span>
+<span class="co">#&gt; $ q4              &lt;dbl&gt; 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,…</span>
+<span class="co">#&gt; $ q5              &lt;dbl&gt; 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,…</span>
+<span class="co">#&gt; $ q6              &lt;dbl&gt; 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,…</span>
+<span class="co">#&gt; $ q7              &lt;dbl&gt; 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,…</span>
+<span class="co">#&gt; $ q8              &lt;dbl&gt; 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,…</span>
+<span class="co">#&gt; $ q9              &lt;dbl&gt; 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,…</span>
+<span class="co">#&gt; $ q10             &lt;dbl&gt; 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,…</span>
+<span class="co">#&gt; $ TimeSpent       &lt;dbl&gt; 2087.05, 2087.05, 2087.05, 2087.05, 2087.05,…</span></code></pre></div>
+<p>We have 40348 observations from 22 variables. We can also see that we have several rows for the same student (“60186”) and course (“AnPhA-S116-01”), resulting in the same final grade (<code>FinalGradeCEMS</code>) of 86.272. (In the book this figure is rounded to 86.3).</p>
+</div>
+</div>
+<div id="select-distinct-row" class="section level3" number="2.4.4">
+<h3>
+<span class="header-section-number">2.4.4</span> Select distinct row<a class="anchor" aria-label="anchor" href="#select-distinct-row"><i class="fas fa-link"></i></a>
+</h3>
+<p>Since we are not carrying out a finer-grained analysis using the Gradebook_Item, these duplicate rows are not necessary. We only want variables at the student level and not at the level of different gradebook items. We can extract only the unique student-level data using the <code><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct()</a></code> function. This function takes as arguments the name of the data frame and the name of the variables used to determine what counts as a unique case.</p>
+<p>Running the following code returns a one-column data frame that lists the names of every distinct gradebook item.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="va">dat</span>, <span class="va">Gradebook_Item</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 222 × 1</span>
+<span class="co">#&gt;    Gradebook_Item                                  </span>
+<span class="co">#&gt;    &lt;chr&gt;                                           </span>
+<span class="co">#&gt;  1 POINTS EARNED &amp; TOTAL COURSE POINTS             </span>
+<span class="co">#&gt;  2 WORK ATTEMPTED                                  </span>
+<span class="co">#&gt;  3 0.1: Message Your Instructor                    </span>
+<span class="co">#&gt;  4 0.2: Intro Assignment - Discussion Board        </span>
+<span class="co">#&gt;  5 0.3: Intro Assignment - Submitting Files        </span>
+<span class="co">#&gt;  6 1.1: Quiz                                       </span>
+<span class="co">#&gt;  7 1.2: Quiz                                       </span>
+<span class="co">#&gt;  8 1.3: Create a Living Creature                   </span>
+<span class="co">#&gt;  9 1.3: Create a Living Creature - Discussion Board</span>
+<span class="co">#&gt; 10 1.4: Negative Feedback Loop Flowchart           </span>
+<span class="co">#&gt; # … with 212 more rows</span></code></pre></div>
+<p>You might be wondering whether some gradebook items have the same names across courses. We can return the unique combination of courses and gradebook items by simply adding another variable to <code><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct()</a></code>:</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="va">dat</span>, <span class="va">course_id</span>, <span class="va">Gradebook_Item</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 1,269 × 2</span>
+<span class="co">#&gt;    course_id     Gradebook_Item                                  </span>
+<span class="co">#&gt;    &lt;chr&gt;         &lt;chr&gt;                                           </span>
+<span class="co">#&gt;  1 AnPhA-S116-01 POINTS EARNED &amp; TOTAL COURSE POINTS             </span>
+<span class="co">#&gt;  2 AnPhA-S116-01 WORK ATTEMPTED                                  </span>
+<span class="co">#&gt;  3 AnPhA-S116-01 0.1: Message Your Instructor                    </span>
+<span class="co">#&gt;  4 AnPhA-S116-01 0.2: Intro Assignment - Discussion Board        </span>
+<span class="co">#&gt;  5 AnPhA-S116-01 0.3: Intro Assignment - Submitting Files        </span>
+<span class="co">#&gt;  6 AnPhA-S116-01 1.1: Quiz                                       </span>
+<span class="co">#&gt;  7 AnPhA-S116-01 1.2: Quiz                                       </span>
+<span class="co">#&gt;  8 AnPhA-S116-01 1.3: Create a Living Creature                   </span>
+<span class="co">#&gt;  9 AnPhA-S116-01 1.3: Create a Living Creature - Discussion Board</span>
+<span class="co">#&gt; 10 AnPhA-S116-01 1.4: Negative Feedback Loop Flowchart           </span>
+<span class="co">#&gt; # … with 1,259 more rows</span></code></pre></div>
+<p>The data frame we get when we run the code chunk above yields a much longer (more observations) dataset. Thus, it looks like a lot of gradebook items were repeated across courses — likely across the different sections of the same course.</p>
+<p>Next, let’s use a similar process to find the unique values at the student level. Thus, instead of exploring unique gradebook items, we will explore unique students (still accounting for the course, as students could enroll in more than one course). This time, we will add the <code>keep_all = TRUE</code> argument.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">dat</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="va">dat</span>, <span class="va">course_id</span>, <span class="va">student_id</span>, .keep_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>
+<span class="co">#&gt; Rows: 603</span>
+<span class="co">#&gt; Columns: 22</span>
+<span class="co">#&gt; $ course_id       &lt;chr&gt; "AnPhA-S116-01", "AnPhA-S116-01", "AnPhA-S11…</span>
+<span class="co">#&gt; $ subject         &lt;chr&gt; "AnPhA", "AnPhA", "AnPhA", "AnPhA", "AnPhA",…</span>
+<span class="co">#&gt; $ semester        &lt;chr&gt; "S116", "S116", "S116", "S116", "S116", "S11…</span>
+<span class="co">#&gt; $ section         &lt;chr&gt; "01", "01", "01", "01", "01", "01", "01", "0…</span>
+<span class="co">#&gt; $ student_id      &lt;chr&gt; "60186", "66693", "66811", "66862", "67508",…</span>
+<span class="co">#&gt; $ Gradebook_Item  &lt;chr&gt; "POINTS EARNED &amp; TOTAL COURSE POINTS", "POIN…</span>
+<span class="co">#&gt; $ Grade_Category  &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
+<span class="co">#&gt; $ FinalGradeCEMS  &lt;dbl&gt; 86.27200, 93.75360, 91.20160, 59.81973, 83.8…</span>
+<span class="co">#&gt; $ Points_Possible &lt;dbl&gt; 5, 24, 10, 15, 5, 5, 24, 5, 30, 24, 460, 30,…</span>
+<span class="co">#&gt; $ Points_Earned   &lt;dbl&gt; 4.05, 24.00, 10.00, 12.00, 5.00, 5.00, 10.00…</span>
+<span class="co">#&gt; $ Gender          &lt;chr&gt; "F", "F", "F", "F", "F", "F", "M", "F", "F",…</span>
+<span class="co">#&gt; $ q1              &lt;dbl&gt; 5, 4, 4, 4, 4, 4, NA, 4, NA, 4, NA, 3, 3, 4,…</span>
+<span class="co">#&gt; $ q2              &lt;dbl&gt; 4, 3, 3, 3, 3, 4, NA, 2, NA, 3, NA, 3, 2, 4,…</span>
+<span class="co">#&gt; $ q3              &lt;dbl&gt; 5, 2, 2, 2, 3, 3, NA, 3, NA, 3, NA, 3, 3, 3,…</span>
+<span class="co">#&gt; $ q4              &lt;dbl&gt; 5, 4, 4, 4, 4, 4, NA, 5, NA, 4, NA, 2, 4, 4,…</span>
+<span class="co">#&gt; $ q5              &lt;dbl&gt; 5, 4, 3, 4, 4, 4, NA, 5, NA, 4, NA, 2, 4, 4,…</span>
+<span class="co">#&gt; $ q6              &lt;dbl&gt; 5, 4, 5, 4, 4, 4, NA, 3, NA, 4, NA, 4, 4, 4,…</span>
+<span class="co">#&gt; $ q7              &lt;dbl&gt; 5, 4, 3, 4, 4, 3, NA, 4, NA, 4, NA, 2, 3, 3,…</span>
+<span class="co">#&gt; $ q8              &lt;dbl&gt; 5, 4, 4, 4, 4, 4, NA, 5, NA, 4, NA, 3, 3, 5,…</span>
+<span class="co">#&gt; $ q9              &lt;dbl&gt; 5, 3, 4, 4, 3, 4, NA, 3, NA, 3, NA, 2, 4, 3,…</span>
+<span class="co">#&gt; $ q10             &lt;dbl&gt; 5, 4, 4, 4, 3, 5, NA, 3, NA, 4, NA, 2, 3, 4,…</span>
+<span class="co">#&gt; $ TimeSpent       &lt;dbl&gt; 2087.0501, 2309.0334, 5298.8507, 1746.9667, …</span></code></pre></div>
+<p>This is a much smaller data frame—with one row for each student in the course. Whereas our prior version of the <code>dat</code> dataset had over 40,000 rows, that prior version is only helpful if we wanted to do an analysis at the level of specific students’ grades for specific gradebook items. Our new dataset keeps only the unique combinations of student and course, leaving us with a more manageable number of observations: 603. Now that our data is ready to go, we can start to ask some questions of it.</p>
+<p>Let’s take one last step. Since we will be using the final grade variable in many of the figures and analyses that follow, let’s rename it using the {dplyr} rename() function to something that is a bit easier to type and remember than <code>FinalGradeCEMS</code>:</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span><span class="va">dat</span>, final_grade <span class="op">=</span> <span class="va">FinalGradeCEMS</span><span class="op">)</span></code></pre></div>
+</div>
+</div>
+<div id="analysis" class="section level2" number="2.5">
+<h2>
+<span class="header-section-number">2.5</span> Analysis<a class="anchor" aria-label="anchor" href="#analysis"><i class="fas fa-link"></i></a>
+</h2>
+<div id="grades-and-time-spent" class="section level3" number="2.5.1">
+<h3>
+<span class="header-section-number">2.5.1</span> Grades and time spent<a class="anchor" aria-label="anchor" href="#grades-and-time-spent"><i class="fas fa-link"></i></a>
+</h3>
+<div id="scatterplot" class="section level4" number="2.5.1.1">
+<h4>
+<span class="header-section-number">2.5.1.1</span> Scatterplot<a class="anchor" aria-label="anchor" href="#scatterplot"><i class="fas fa-link"></i></a>
+</h4>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">dat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="co"># aes() tells ggplot2 what variables to map to what feature of a plot</span>
+  <span class="co"># Here we map variables to the x- and y-axis</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">TimeSpent</span>, y <span class="op">=</span> <span class="va">final_grade</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="co"># Creates a point with x- and y-axis coordinates specified above</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/dataedu/man/dataedu_colors.html">dataedu_colors</a></span><span class="op">(</span><span class="st">"green"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/dataedu/man/theme_dataedu.html">theme_dataedu</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Time Spent"</span>,
+       y <span class="op">=</span> <span class="st">"Final Grade"</span><span class="op">)</span>
+<span class="co">#&gt; Warning: Removed 30 rows containing missing values (geom_point).</span></code></pre></div>
+<div class="inline-figure"><img src="01-process-data_files/figure-html/grade-time-1.png" width="672"></div>
+</div>
+<div id="scatterplot-with-best-fit" class="section level4" number="2.5.1.2">
+<h4>
+<span class="header-section-number">2.5.1.2</span> Scatterplot with best fit<a class="anchor" aria-label="anchor" href="#scatterplot-with-best-fit"><i class="fas fa-link"></i></a>
+</h4>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">dat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">TimeSpent</span>, y <span class="op">=</span> <span class="va">final_grade</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/dataedu/man/dataedu_colors.html">dataedu_colors</a></span><span class="op">(</span><span class="st">"green"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="co"># same as above</span>
+  <span class="co"># this adds a line of best fit</span>
+  <span class="co"># method = "lm" tells ggplot2 to fit the line using linear regression</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/dataedu/man/theme_dataedu.html">theme_dataedu</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Time Spent"</span>,
+       y <span class="op">=</span> <span class="st">"Final Grade"</span><span class="op">)</span>
+<span class="co">#&gt; `geom_smooth()` using formula 'y ~ x'</span>
+<span class="co">#&gt; Warning: Removed 30 rows containing non-finite values (stat_smooth).</span>
+<span class="co">#&gt; Warning: Removed 30 rows containing missing values (geom_point).</span></code></pre></div>
+<div class="inline-figure"><img src="01-process-data_files/figure-html/grade-time2-1.png" width="672"></div>
+<p>Looking at this plot, it appears that the more time students spent on the course, the higher their final grade is.</p>
+<p>What is the line doing in the upper right part of the graph? Based upon the trend observable in the data, the line of best fit predicts that students who spend a particular amount of time on the course earn greater than 100 for their final grade! Of course, this is not possible and highlights the importance of understanding your data and carefully interpreting lines of best fit (and other, more sophisticated analyses) carefully, keeping that understanding and knowledge in mind as you present and make sense of the results.</p>
+</div>
+<div id="regression" class="section level4" number="2.5.1.3">
+<h4>
+<span class="header-section-number">2.5.1.3</span> Regression<a class="anchor" aria-label="anchor" href="#regression"><i class="fas fa-link"></i></a>
+</h4>
+<p>We can find out exactly what the relationship between these two variables is using a linear model. We discuss linear models in more detail in Chapter 10.</p>
+<p>Let’s use this technique to model the relationship between the time spent on the course and students’ final grades. Here, we predict final_grade. The student’s final, reported grade is the dependent, or y-variable, and so we enter it first, after the <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> command and before the tilde (<code>~</code>) symbol. To the right of the tilde is one independent variable, <code>TimeSpent</code>, or the time that students spent on the course. We also pass, or provide, the data frame, <code>dat</code>. At this point, we’re ready to run the model. Let’s run this line of code and save the results to an object — we chose <code>m_linear</code>, but any name will work. We will then run the <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> function on the output.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">m_linear</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">final_grade</span> <span class="op">~</span> <span class="va">TimeSpent</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_linear</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; lm(formula = final_grade ~ TimeSpent, data = dat)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residuals:</span>
+<span class="co">#&gt;     Min      1Q  Median      3Q     Max </span>
+<span class="co">#&gt; -67.136  -7.805   4.723  14.471  30.317 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;              Estimate Std. Error t value Pr(&gt;|t|)    </span>
+<span class="co">#&gt; (Intercept) 6.581e+01  1.491e+00   44.13   &lt;2e-16 ***</span>
+<span class="co">#&gt; TimeSpent   6.081e-03  6.482e-04    9.38   &lt;2e-16 ***</span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residual standard error: 20.71 on 571 degrees of freedom</span>
+<span class="co">#&gt;   (30 observations deleted due to missingness)</span>
+<span class="co">#&gt; Multiple R-squared:  0.1335, Adjusted R-squared:  0.132 </span>
+<span class="co">#&gt; F-statistic: 87.99 on 1 and 571 DF,  p-value: &lt; 2.2e-16</span></code></pre></div>
+</div>
+<div id="print-regression-model-as-html-table" class="section level4" number="2.5.1.4">
+<h4>
+<span class="header-section-number">2.5.1.4</span> Print regression model as HTML table<a class="anchor" aria-label="anchor" href="#print-regression-model-as-html-table"><i class="fas fa-link"></i></a>
+</h4>
+<p>Another way that we can generate table output is with a function from the {sjPlot} package, <code><a href="https://strengejacke.github.io/sjPlot/reference/tab_model.html">tab_model()</a></code>. When you run this code, you should see the results pop up in the “Viewer” pane of RStudio.</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://strengejacke.github.io/sjPlot/reference/tab_model.html">tab_model</a></span><span class="op">(</span><span class="va">m_linear</span>,
+          title <span class="op">=</span> <span class="st">"Table 7.1"</span><span class="op">)</span></code></pre></div>
+<div class="inline-table"><table style="border-collapse:collapse; border:none;" class="table table-sm">
+<caption style="font-weight: bold; text-align:left;">
+Table 7.1
+</caption>
+<tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
+ 
+</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
+final grade
+</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
+Predictors
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+Estimates
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+CI
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+p
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+(Intercept)
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+65.81
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+62.88 – 68.74
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+TimeSpent
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.01
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00 – 0.01
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
+Observations
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
+573
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+R<sup>2</sup> / R<sup>2</sup> adjusted
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+0.134 / 0.132
+</td>
+</tr>
+</table></div>
+<p>This will work well for R Markdown documents (or simply to interpret the model in R). If you want to save the model for use in a Word document, the {apaTables} (<a href="https://dstanley4.github.io/apaTables/articles/apaTables.html" class="uri">https://dstanley4.github.io/apaTables/articles/apaTables.html</a>) package may be helpful. To save a table in Word format, just pass the name of the regression model to a function from the apaTables package, like we did with the tab_model() function. Then, you can save the output to a Word document, simply by adding a filename argument:</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/apaTables/man/apa.reg.table.html">apa.reg.table</a></span><span class="op">(</span><span class="va">m_linear</span>, filename <span class="op">=</span> <span class="st">"regression-table-output.doc"</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Regression results using final_grade as the criterion</span>
+<span class="co">#&gt;  </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;    Predictor       b       b_95%_CI beta  beta_95%_CI sr2 sr2_95%_CI</span>
+<span class="co">#&gt;  (Intercept) 65.81** [62.88, 68.74]                                 </span>
+<span class="co">#&gt;    TimeSpent  0.01**   [0.00, 0.01] 0.37 [0.29, 0.44] .13 [.09, .19]</span>
+<span class="co">#&gt;                                                                     </span>
+<span class="co">#&gt;                                                                     </span>
+<span class="co">#&gt;                                                                     </span>
+<span class="co">#&gt;      r             Fit</span>
+<span class="co">#&gt;                       </span>
+<span class="co">#&gt;  .37**                </span>
+<span class="co">#&gt;            R2 = .134**</span>
+<span class="co">#&gt;        95% CI[.09,.19]</span>
+<span class="co">#&gt;                       </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Note. A significant b-weight indicates the beta-weight and semi-partial correlation are also significant.</span>
+<span class="co">#&gt; b represents unstandardized regression weights. beta indicates the standardized regression weights. </span>
+<span class="co">#&gt; sr2 represents the semi-partial correlation squared. r represents the zero-order correlation.</span>
+<span class="co">#&gt; Square brackets are used to enclose the lower and upper limits of a confidence interval.</span>
+<span class="co">#&gt; * indicates p &lt; .05. ** indicates p &lt; .01.</span>
+<span class="co">#&gt; </span></code></pre></div>
+</div>
+</div>
+<div id="survey-responses" class="section level3" number="2.5.2">
+<h3>
+<span class="header-section-number">2.5.2</span> Survey responses<a class="anchor" aria-label="anchor" href="#survey-responses"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">survey_responses</span> <span class="op">&lt;-</span>
+  <span class="va">pre_survey</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="co"># Gather questions and responses</span>
+  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="va">q1</span><span class="op">:</span><span class="va">q10</span>,
+               names_to <span class="op">=</span> <span class="st">"question"</span>,
+               values_to <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
+    <span class="co"># Here's where we make the column of question categories</span>
+    measure <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span><span class="op">(</span>
+      <span class="va">question</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"q1"</span>, <span class="st">"q4"</span>, <span class="st">"q5"</span>, <span class="st">"q8"</span>, <span class="st">"q10"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"int"</span>,
+      <span class="va">question</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"q2"</span>, <span class="st">"q6"</span>, <span class="st">"q9"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"uv"</span>,
+      <span class="va">question</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"q3"</span>, <span class="st">"q7"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"pc"</span>,
+      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span>
+    <span class="op">)</span>
+  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">student_id</span>, <span class="va">measure</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="co"># Here's where we compute the mean of the responses</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>
+    <span class="co"># Mean response for each measure</span>
+    mean_response <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">response</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+    <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+    <span class="co"># Filter NA (missing) responses</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">mean_response</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">measure</span>, 
+              values_from <span class="op">=</span> <span class="va">mean_response</span><span class="op">)</span>
+<span class="co">#&gt; `summarise()` has grouped output by 'student_id'. You can override using the `.groups` argument.</span>
+
+<span class="va">survey_responses</span>
+<span class="co">#&gt; # A tibble: 517 × 4</span>
+<span class="co">#&gt; # Groups:   student_id [517]</span>
+<span class="co">#&gt;    student_id   int    pc    uv</span>
+<span class="co">#&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt;  1 43146       5     4.5   4.33</span>
+<span class="co">#&gt;  2 44638       4.2   3.5   4   </span>
+<span class="co">#&gt;  3 47448       5     4     3.67</span>
+<span class="co">#&gt;  4 47979       5     3.5   5   </span>
+<span class="co">#&gt;  5 48797       3.8   3.5   3.5 </span>
+<span class="co">#&gt;  6 49147       4.25  3.73  3.71</span>
+<span class="co">#&gt;  7 51943       4.6   4     4   </span>
+<span class="co">#&gt;  8 52326       5     3.5   5   </span>
+<span class="co">#&gt;  9 52446       3     3     3.33</span>
+<span class="co">#&gt; 10 53248       4     3     3.33</span>
+<span class="co">#&gt; # … with 507 more rows</span></code></pre></div>
+<p>Now that we’ve prepared the survey responses, we can use the <code><a href="https://rdrr.io/pkg/apaTables/man/apa.cor.table.html">apa.cor.table()</a></code> function:</p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">survey_responses</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/apaTables/man/apa.cor.table.html">apa.cor.table</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Means, standard deviations, and correlations with confidence intervals</span>
+<span class="co">#&gt;  </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   Variable M    SD   1          2         </span>
+<span class="co">#&gt;   1. int   4.22 0.59                      </span>
+<span class="co">#&gt;                                           </span>
+<span class="co">#&gt;   2. pc    3.60 0.63 .59**                </span>
+<span class="co">#&gt;                      [.53, .64]           </span>
+<span class="co">#&gt;                                           </span>
+<span class="co">#&gt;   3. uv    3.71 0.70 .57**      .50**     </span>
+<span class="co">#&gt;                      [.51, .62] [.43, .56]</span>
+<span class="co">#&gt;                                           </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Note. M and SD are used to represent mean and standard deviation, respectively.</span>
+<span class="co">#&gt; Values in square brackets indicate the 95% confidence interval.</span>
+<span class="co">#&gt; The confidence interval is a plausible range of population correlations </span>
+<span class="co">#&gt; that could have caused the sample correlation (Cumming, 2014).</span>
+<span class="co">#&gt;  * indicates p &lt; .05. ** indicates p &lt; .01.</span>
+<span class="co">#&gt; </span></code></pre></div>
+</div>
+<div id="time-spent-in-hours" class="section level3" number="2.5.3">
+<h3>
+<span class="header-section-number">2.5.3</span> Time spent in hours<a class="anchor" aria-label="anchor" href="#time-spent-in-hours"><i class="fas fa-link"></i></a>
+</h3>
+<p>The time spent variable is on a very large scale (minutes); what if we transformed it to represent the number of hours that students spent on the course? Let’s use the <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> function we used earlier. We’ll end the variable name with <code>_hours</code>, to represent what this variable means.</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># creating a new variable for the amount of time spent in hours</span>
+<span class="va">dat</span> <span class="op">&lt;-</span> 
+  <span class="va">dat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>TimeSpent_hours <span class="op">=</span> <span class="va">TimeSpent</span> <span class="op">/</span> <span class="fl">60</span><span class="op">)</span>
+
+<span class="co"># the same linear model as above, but with the TimeSpent variable in hours</span>
+<span class="va">m_linear_1</span> <span class="op">&lt;-</span> 
+  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">final_grade</span> <span class="op">~</span> <span class="va">TimeSpent_hours</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
+
+<span class="co"># viewing the output of the linear model</span>
+<span class="fu"><a href="https://strengejacke.github.io/sjPlot/reference/tab_model.html">tab_model</a></span><span class="op">(</span><span class="va">m_linear_1</span>,
+          title <span class="op">=</span> <span class="st">"Table 7.2"</span><span class="op">)</span></code></pre></div>
+<div class="inline-table"><table style="border-collapse:collapse; border:none;" class="table table-sm">
+<caption style="font-weight: bold; text-align:left;">
+Table 7.2
+</caption>
+<tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
+ 
+</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
+final grade
+</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
+Predictors
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+Estimates
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+CI
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+p
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+(Intercept)
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+65.81
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+62.88 – 68.74
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+TimeSpent hours
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.36
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.29 – 0.44
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
+Observations
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
+573
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+R<sup>2</sup> / R<sup>2</sup> adjusted
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+0.134 / 0.132
+</td>
+</tr>
+</table></div>
+<p>The scale still does not seem quite right. What if we standardized the variable to have a mean of zero and a standard deviation of one?</p>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># this is to standardize the TimeSpent variable to have a mean of 0 and a standard deviation of 1</span>
+<span class="va">dat</span> <span class="op">&lt;-</span> 
+  <span class="va">dat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>TimeSpent_std <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span><span class="op">(</span><span class="va">TimeSpent</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co"># the same linear model as above, but with the TimeSpent variable standardized</span>
+<span class="va">m_linear_2</span> <span class="op">&lt;-</span> 
+  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">final_grade</span> <span class="op">~</span> <span class="va">TimeSpent_std</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
+
+<span class="co"># viewing the output of the linear model</span>
+<span class="fu"><a href="https://strengejacke.github.io/sjPlot/reference/tab_model.html">tab_model</a></span><span class="op">(</span><span class="va">m_linear_2</span>,
+          title <span class="op">=</span> <span class="st">"Table 7.3"</span><span class="op">)</span></code></pre></div>
+<div class="inline-table"><table style="border-collapse:collapse; border:none;" class="table table-sm">
+<caption style="font-weight: bold; text-align:left;">
+Table 7.3
+</caption>
+<tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
+ 
+</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
+final grade
+</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
+Predictors
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+Estimates
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+CI
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+p
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+(Intercept)
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+76.75
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+75.05 – 78.45
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+TimeSpent std
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+8.24
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+6.51 – 9.96
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
+Observations
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
+573
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+R<sup>2</sup> / R<sup>2</sup> adjusted
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+0.134 / 0.132
+</td>
+</tr>
+</table></div>
+<p>When we look at this output, it seems to make more sense. However, there is a different interpretation now for the time spent variable: for every one standard deviation increase in the amount of time spent on the course, students’ final grades increased by 8.24, or around eight percentage points.</p>
+</div>
+<div id="linear-model-with-subject-added" class="section level3" number="2.5.4">
+<h3>
+<span class="header-section-number">2.5.4</span> Linear model with subject added<a class="anchor" aria-label="anchor" href="#linear-model-with-subject-added"><i class="fas fa-link"></i></a>
+</h3>
+<p>Let’s extend our regression model and consider the following to be the final model in this sequence: What other variables may matter? Perhaps there are differences based on the subject of the course. We can add subject as a variable easily, as follows:</p>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># a linear model with the subject added </span>
+<span class="co"># independent variables, such as TimeSpent_std and subject, can simply be separated with a plus symbol:</span>
+<span class="va">m_linear_3</span> <span class="op">&lt;-</span> 
+  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">final_grade</span> <span class="op">~</span> <span class="va">TimeSpent_std</span> <span class="op">+</span> <span class="va">subject</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
+
+<span class="fu"><a href="https://strengejacke.github.io/sjPlot/reference/tab_model.html">tab_model</a></span><span class="op">(</span><span class="va">m_linear_3</span>,
+          title <span class="op">=</span> <span class="st">"Table 7.4"</span><span class="op">)</span></code></pre></div>
+<div class="inline-table"><table style="border-collapse:collapse; border:none;" class="table table-sm">
+<caption style="font-weight: bold; text-align:left;">
+Table 7.4
+</caption>
+<tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
+ 
+</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
+final grade
+</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
+Predictors
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+Estimates
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+CI
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+p
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+(Intercept)
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+70.19
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+66.76 – 73.61
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+TimeSpent std
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+9.63
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+7.90 – 11.37
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+subject [BioA]
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-1.56
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-8.64 – 5.52
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.665
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+subject [FrScA]
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+11.73
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+7.38 – 16.08
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+subject [OcnA]
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.10
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-3.96 – 6.16
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.670
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+subject [PhysA]
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+16.04
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+10.00 – 22.07
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
+Observations
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
+573
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+R<sup>2</sup> / R<sup>2</sup> adjusted
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+0.213 / 0.206
+</td>
+</tr>
+</table></div>
+<p>It looks like subjects FrSc — forensic science — and PhysA — Physics — are associated with a higher final grade. This indicates that students in those two classes earned higher grades than students in other science classes in this dataset.</p>
+</div>
+</div>
+<div id="conclusion" class="section level2" number="2.6">
+<h2>
+<span class="header-section-number">2.6</span> Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"><i class="fas fa-link"></i></a>
+</h2>
+<p>In this walkthrough, we focused on taking unprocessed or raw data and loading, viewing, and then processing it through a series of steps. The result was a dataset which we could use to create visualizations and a simple (but powerful!) linear model, also known as a regression model. We found that the time that students spent on the course was positively (and statistically significantly) related to students’ final grades, and that there appeared to be differences by subject. While we focused on using this model in a traditional, explanatory sense, it could also potentially be used for predictive analytics in that knowing how long a student spent on the course and what subject their course is could be used to estimate what that student’s final grade might be. We focus on uses of predictive models further in Chapter 14.</p>
+<p>In the follow-up to this walkthrough (see Chapter 13), we will focus on visualizing and then modeling the data using an advanced methodological technique, multilevel models, using the data we prepared as a part of the data processing pipeline used in this chapter.</p>
+
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="index.html"><span class="header-section-number">1</span> Preface</a></div>
+<div class="next"><a href="cross.html"><span class="header-section-number">3</span> Cross-references</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#online-science-class-data"><span class="header-section-number">2</span> Online Science Class Data</a></li>
+<li><a class="nav-link" href="#introduction"><span class="header-section-number">2.1</span> Introduction</a></li>
+<li><a class="nav-link" href="#setup"><span class="header-section-number">2.2</span> Setup</a></li>
+<li>
+<a class="nav-link" href="#process-survey"><span class="header-section-number">2.3</span> Process Survey</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#inspect-data"><span class="header-section-number">2.3.1</span> Inspect Data</a></li>
+<li><a class="nav-link" href="#rename-variables"><span class="header-section-number">2.3.2</span> Rename variables</a></li>
+<li><a class="nav-link" href="#reverse-scale"><span class="header-section-number">2.3.3</span> Reverse scale</a></li>
+<li><a class="nav-link" href="#from-wide-to-long-format"><span class="header-section-number">2.3.4</span> From wide to long format</a></li>
+<li><a class="nav-link" href="#create-measure-column"><span class="header-section-number">2.3.5</span> Create measure column</a></li>
+<li><a class="nav-link" href="#add-measure-variable"><span class="header-section-number">2.3.6</span> Add measure variable</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#process-course-cata"><span class="header-section-number">2.4</span> Process course cata</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#inspect-data-1"><span class="header-section-number">2.4.1</span> Inspect data</a></li>
+<li><a class="nav-link" href="#separate-data"><span class="header-section-number">2.4.2</span> Separate data</a></li>
+<li><a class="nav-link" href="#join-data"><span class="header-section-number">2.4.3</span> Join data</a></li>
+<li><a class="nav-link" href="#select-distinct-row"><span class="header-section-number">2.4.4</span> Select distinct row</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#analysis"><span class="header-section-number">2.5</span> Analysis</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#grades-and-time-spent"><span class="header-section-number">2.5.1</span> Grades and time spent</a></li>
+<li><a class="nav-link" href="#survey-responses"><span class="header-section-number">2.5.2</span> Survey responses</a></li>
+<li><a class="nav-link" href="#time-spent-in-hours"><span class="header-section-number">2.5.3</span> Time spent in hours</a></li>
+<li><a class="nav-link" href="#linear-model-with-subject-added"><span class="header-section-number">2.5.4</span> Linear model with subject added</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#conclusion"><span class="header-section-number">2.6</span> Conclusion</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/petzi53/ldsr/blob/master/01-process-data.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/petzi53/ldsr/edit/master/01-process-data.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Learning Data Science with R</strong>" was written by Peter Baumgartner. It was last built on 2021-12-13.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>
