@@ -35,7 +35,6 @@ library(tidyverse)
 #> x dplyr::lag()    masks stats::lag()
 library(apaTables)
 library(sjPlot)
-#> Learn more about sjPlot with 'browseVignettes("sjPlot")'.
 library(readxl)
 library(dataedu)
 ```
