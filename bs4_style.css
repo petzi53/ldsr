@@ -1,0 +1,252 @@
+
+p.caption {
+  color: #777;
+  margin-top: 10px;
+  text-align: center;
+}
+
+p code {
+  white-space: inherit;
+}
+pre {
+  word-break: normal;
+  word-wrap: normal;
+}
+pre code {
+  white-space: inherit;
+}
+
+
+
+/* Sidebar formating --------------------------------------------*/
+
+
+div.sidebar {
+  border-left: 7px solid #ccc;
+  margin: 1em 0;
+  padding-left: 1em;
+}
+
+
+/* .book .book-body .page-wrapper .page-inner section.normal is needed
+   to override the styles produced by gitbook, which are ridiculously
+   overspecified. Goal of the selectors is to ensure internal "margins"
+   controlled only by padding of container */
+
+
+.book .book-body .page-wrapper .page-inner section.normal div.sidebar > :first-child {
+  margin-top: 0;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal div.sidebar > :last-child {
+  margin-bottom: 0;
+}
+
+/* code from short version of bookdown which enables images for
+blocks (note, tip, important, caution, and warning) */
+
+body {
+  /* font-size: 1.6rem; */
+  text-align: justify;
+}
+
+
+h1,h2,h3,h4,h5 {
+  text-align: left;
+}
+
+/*  display list with single spacing ---------------------------------------- */
+
+main ol > li:last-child, main ul > li:last-child {
+    margin-bottom: 1rem;
+}
+
+main ol > li:first-child, main ul > li:first-child {
+    margin-top: 1rem;
+}
+
+main li {
+    margin-bottom: -0.1rem;
+}
+
+.caution, .important, .note, .tip, .warning {
+  padding: 1em 1em 1em 4em;
+  margin-bottom: 10px;
+  background: #f5f5f5 5px center/3em no-repeat;
+  border: 2px solid orange;
+  border-radius: 10px;
+}
+
+.caution {
+  background-image: url("img/icons/caution.png");
+}
+
+.important {
+  background-image: url("img/icons/attention.png");
+}
+
+.note {
+  background-image: url("img/icons/note.png");
+}
+
+.tip {
+  background-image: url("img/icons/tip.png");
+}
+
+.warning {
+  background-image: url("img/icons/warning.png");
+}
+
+/* My own style, taken from itns-tutorial */
+
+
+/*   background-image: url("../images/caution.png"); */
+
+/* using Bootstrap 4 has smaller font-size: 1rem,
+   Bootstrap 3 has 14px
+body {
+  font-size: 1.4rem !important;
+}
+*/
+
+
+:root {
+  --primary:        #027BFF;
+  --secondary:      #6C757D;
+  --success-bg:     #dff0d8;
+  --success-fg:     #468847;
+  --stop:           #DC3545;
+  --stop-bg:        #f2dede;
+  --stop-fg:        #b94a48;
+  --warning-bg:     #fcf8e3;
+  --warning-fg:     #d1b37c;
+  --info:           #25A2B8;
+  --info-bg:        #D9EDF7;
+  --info-fg:        #317EAC;
+}
+
+
+.greenbox {
+  background-color: var(--success-bg); /* #d9ffe9; */
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+.successbox {
+  padding: 1em 1em 1em 4em;
+  margin-bottom: 10px;
+  border: 2px solid var(--success-fg);
+  border-radius: 10px;
+  background: var(--success-bg) 5px center/3em no-repeat;
+  background-image: url("img/icons/checkmark.png");
+  background-repeat: no-repeat;
+}
+
+.bluebox {
+  background-color: var(--info-bg); /* #e6f0ff; */
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+
+.infobox {
+  padding: 1em 1em 1em 4em;
+  margin-bottom: 10px;
+  border: 2px solid var(--info-fg);
+  border-radius: 10px;
+  background: var(--info-bg) 5px center/3em no-repeat;
+  background-repeat: no-repeat;
+  background-image: url("img/icons/info.png");
+}
+
+
+.orangebox {
+  background-color: var(--warning-bg); /* #ffeedf; */
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+.warningbox {
+  padding: 1em 1em 1em 4em;
+  margin-bottom: 10px;
+  border: 2px solid var(--warning-fg);
+  border-radius: 10px;
+  background: var(--warning-bg) 5px center/3em no-repeat;
+  background-repeat: no-repeat;
+  background-image: url("img/icons/warning.png");
+}
+
+
+
+.redbox {
+  background-color: var(--stop-bg);
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+.stopbox {
+  padding: 1em 1em 1em 4em;
+  margin-bottom: 10px;
+  border: 2px solid var(--stop-fg);
+  border-radius: 10px;
+  background: var(--stop-bg) 5px center/3em no-repeat;
+  background-repeat: no-repeat;
+  background-image: url("img/icons/stop.png");
+}
+
+.errorbox {
+  padding: 1em 1em 1em 4em;
+  margin-bottom: 10px;
+  border: 2px solid var(--stop-fg);
+  border-radius: 10px;
+  background: var(--stop-bg) 5px center/3em no-repeat;
+  background-repeat: no-repeat;
+  background-image: url("img/icons/error.png");
+}
+
+.greybox, .graybox {
+  background-color: whitesmoke;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+
+
+.todobox {
+  padding: 1em 1em 1em 4em;
+  margin-bottom: 10px;
+  border: 2px solid black;
+  border-radius: 10px;
+  background: whitesmoke 5px center/3em no-repeat;
+  background-image: url("img/icons/todo.png");
+  background-repeat: no-repeat;
+}
+
+
+.float-right {
+    float: right;
+    width: 25%;
+    height: 25%;
+}
+
+.float-left {
+    float: left;
+    width: 25%;
+    height: 25%;
+}
+
+div.hanging-indent {
+text-indent: -28px;
+padding-left: 28px;
+}
+
+.shadow {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
