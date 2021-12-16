@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>3 Classroom Gradebook | Learning Data Science with R</title>
+<meta name="author" content="Peter Baumgartner">
+<meta name="description" content="3.1 Introduction Notes of this chapter references chapter 8 (Walkthrough 2: Approaching Gradebook Data From a Data Science Perspective) of Data Science in Education Using R. The analysis centers...">
+<meta name="generator" content="bookdown 0.24 with bs4_book()">
+<meta property="og:title" content="3 Classroom Gradebook | Learning Data Science with R">
+<meta property="og:type" content="book">
+<meta property="og:description" content="3.1 Introduction Notes of this chapter references chapter 8 (Walkthrough 2: Approaching Gradebook Data From a Data Science Perspective) of Data Science in Education Using R. The analysis centers...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="3 Classroom Gradebook | Learning Data Science with R">
+<meta name="twitter:description" content="3.1 Introduction Notes of this chapter references chapter 8 (Walkthrough 2: Approaching Gradebook Data From a Data Science Perspective) of Data Science in Education Using R. The analysis centers...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.11/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><link rel="stylesheet" href="bs4_style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Learning Data Science with R</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html"><span class="header-section-number">1</span> Preface</a></li>
+<li><a class="" href="online-science-class-data.html"><span class="header-section-number">2</span> Online Science Class Data</a></li>
+<li><a class="active" href="classroom-gradebook.html"><span class="header-section-number">3</span> Classroom Gradebook</a></li>
+<li><a class="" href="references.html">References</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/petzi53/ldsr">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="classroom-gradebook" class="section level1" number="3">
+<h1>
+<span class="header-section-number">3</span> Classroom Gradebook<a class="anchor" aria-label="anchor" href="#classroom-gradebook"><i class="fas fa-link"></i></a>
+</h1>
+<div id="introduction-1" class="section level2" number="3.1">
+<h2>
+<span class="header-section-number">3.1</span> Introduction<a class="anchor" aria-label="anchor" href="#introduction-1"><i class="fas fa-link"></i></a>
+</h2>
+<p>Notes of this chapter references chapter 8 (<a href="https://datascienceineducation.com/c08.html">Walkthrough
+2</a>: Approaching Gradebook
+Data From a Data Science Perspective) of <a href="https://datascienceineducation.com/">Data Science in Education
+Using R</a>.</p>
+<p>The analysis centers around a common K-12 classroom tool: the gradebook.
+Because this kind of data is on an individual student level this chapter
+uses a simulated dataset. Data source is an Excel file named
+<code>ExcelGradeBook.xlsx</code> generated from an Excel gradebook template,
+<a href="https://web.mit.edu/jabbott/www/excelgradetracker.html">Assessment Types
+Points</a>.</p>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Load libraries</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
+<span class="co">#&gt; ── Attaching packages ────────────────────────────────── tidyverse 1.3.1 ──</span>
+<span class="co">#&gt; ✓ ggplot2 3.3.5     ✓ purrr   0.3.4</span>
+<span class="co">#&gt; ✓ tibble  3.1.6     ✓ dplyr   1.0.7</span>
+<span class="co">#&gt; ✓ tidyr   1.1.4     ✓ stringr 1.4.0</span>
+<span class="co">#&gt; ✓ readr   2.1.1     ✓ forcats 0.5.1</span>
+<span class="co">#&gt; ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──</span>
+<span class="co">#&gt; x dplyr::filter() masks stats::filter()</span>
+<span class="co">#&gt; x dplyr::lag()    masks stats::lag()</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://here.r-lib.org/">here</a></span><span class="op">)</span>
+<span class="co">#&gt; here() starts at /Users/petzi/Documents/Meine-Repos/ldsr</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sfirke/janitor">janitor</a></span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'janitor'</span>
+<span class="co">#&gt; The following objects are masked from 'package:stats':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     chisq.test, fisher.test</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/data-edu/dataedu">dataedu</a></span><span class="op">)</span></code></pre></div>
+</div>
+<div id="transfer-file" class="section level2" number="3.2">
+<h2>
+<span class="header-section-number">3.2</span> Transfer file<a class="anchor" aria-label="anchor" href="#transfer-file"><i class="fas fa-link"></i></a>
+</h2>
+<p>Some steps to import data are in the book described differently and IMHO
+not completely. The book assumes that you have downloaded the book
+repository. I will focus just on the transfer of the file itself.</p>
+<p>To transfer the file to your computer there are two options:</p>
+<ul>
+<li>You could go manually to the location on the internet. The file is
+available at the <a href="https://github.com/data-edu/data-science-in-education">book
+repository</a>
+inside the folder “gradebook” which itself is under the folder
+“data.” You could go to the repo page
+(<a href="https://github.com/data-edu/data-science-in-education/blob/master/data/gradebooks/ExcelGradeBook.xlsx" class="uri">https://github.com/data-edu/data-science-in-education/blob/master/data/gradebooks/ExcelGradeBook.xlsx</a>)
+and click on the “Download” button to save the file on your hard
+disc in the prepared RStudio project folder.</li>
+<li>Our — my preferred solution — you could download the file
+directly via R. In this case we need to solve a general problem: How
+can you make sure that your colleagues are able to use your code?
+They have on their computers a different file organisation, so that
+using an absolute file path would not work. Even a relative path is
+dependent from the folder you are where you are going to start the
+procedure.</li>
+</ul>
+<div id="using-here" class="section level3" number="3.2.1">
+<h3>
+<span class="header-section-number">3.2.1</span> Using <code>here()</code><a class="anchor" aria-label="anchor" href="#using-here"><i class="fas fa-link"></i></a>
+</h3>
+<p>Providing file locations for loading or saving files is under the
+reproducibility perspective a big challenge. It is also a general
+problem so that it pays the effort to develop a special package just to
+solve this problem. The general solution is implemented in the
+<strong>{rprojroot}</strong> package. <a href="https://rprojroot.r-lib.org/">rprojroot</a> helps
+accessing files relative to the project root to <a href="https://gist.github.com/jennybc/362f52446fe1ebc4c49f">stop the working
+directory
+insanity</a>. Nut we
+will use the <strong>{here}</strong> package, which is derived from <strong>{rprojroot}</strong>
+but much simpler to use for our purpose.</p>
+<p>The <code><a href="https://here.r-lib.org//reference/here.html">here()</a></code> function from the <strong>{here}</strong> package uses a reasonable
+heuristic to locate your file relative to the project root. This means
+that you only have to add the file path from your working directory.
+There are two modes to do this:</p>
+<ul>
+<li>You write one complete expression like
+<code>here("some/path/below/your/project/root.txt")</code> or</li>
+<li>you write every part separately like
+<code>here("some", "path", "below", "your", "project", "root.txt")</code>
+</li>
+</ul>
+<p>I prefer the second option with a somewhat different layout, so that I
+can see more clearly the directory hierarchy:</p>
+<p><code>here("some",        "path",        "below",        "your",              "project",        "root.txt"      )</code></p>
+<p>Before you can transfer the file to your computer you need to prepare a
+place where you would like to store the file. I recommend to use the
+same path hierarchy as in the book repository: Create a folder
+<code>gradebook</code> inside of a folder <code>data</code> that itself lives at the top level
+in your project directory.</p>
+<p>You could create the folders manually either on the level of my
+operation system or via the file pane of RStudio. The advantage is that
+I do not have to learn and apply R commands for this procedure. The
+disadvantage is that the code is not full reproducible. If you want
+secure that your colleagues are working with exact the same environment
+than you, than provide the necessary code, but commented out. Why
+commented out? Nobody wants that a program changes something on the
+private local hard disk without the explicit permission of the owner.</p>
+<p>Now let’s apply <code><a href="https://here.r-lib.org//reference/here.html">here()</a></code> and transfer the file to your computer:</p>
+<p>First of all we need to prepare the file path and create the folder
+structure. We need to do this from a standard reference point, e.g.,
+from the perspective of the project directory by using the <code><a href="https://here.r-lib.org//reference/here.html">here()</a></code>
+function.</p>
+<p>To get the download URL we need to right-click at the “Download” button
+at the location reported above and to copy the internet address into the
+clipboard. To ease the handling of this long string we are going to
+store it under the variable name <code>gradebook_url</code>. Then we will use the
+<code><a href="https://rdrr.io/r/utils/download.file.html">download.file()</a></code>, which is part of every R installation.</p>
+<p><code><a href="https://rdrr.io/r/utils/download.file.html">download.file()</a></code> has several options, but we are going to use only the
+two mandatory parameters: The URL where we will get the file and the
+local path where we will store the transferred file. Again we will use
+for the file path the <code><a href="https://here.r-lib.org//reference/here.html">here()</a></code> function.</p>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## comment out the next line if you want create the folder structure programmatically</span>
+<span class="co"># dir.create(here("data", "folder"), recursive = TRUE)</span>
+
+<span class="co">## store download link into a variable</span>
+<span class="va">gradebook_url</span> <span class="op">&lt;-</span> 
+    <span class="st">"https://github.com/data-edu/data-science-in-education/raw/master/data/gradebooks/ExcelGradeBook.xlsx"</span>
+
+<span class="co">## download and store the file</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="va">gradebook_url</span>, <span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"data"</span>, 
+                                  <span class="st">"gradebooks"</span>, 
+                                  <span class="st">"ExcelGradeBook.xlsx"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>If you have succeeded, you should see the following text under the R chunk:</p>
+<div class="greybox">
+<p>trying URL ‘<a href="https://github.com/data-edu/data-science-in-" class="uri">https://github.com/data-edu/data-science-in-</a><br>
+education/raw/master/data/gradebooks/ExcelGradeBook.xlsx’<br> Content
+type ‘application/octet-stream’ length 116083 bytes (113 KB)<br>
+==================================================<br> downloaded 113
+KB<br></p>
+</div>
+<p>To secure that you do not always download the same file when you run
+your program code I recommend to comment out these lines. Or — if you
+are using RMarkdown like me — write the option “eval=FALSE” in the
+chunk header. (This was the reason that you could not see the original
+message in the R chunk above so that I had to reproduce the message
+myself.)</p>
+</div>
+<div id="import-file-into-r" class="section level3" number="3.2.2">
+<h3>
+<span class="header-section-number">3.2.2</span> Import file into R<a class="anchor" aria-label="anchor" href="#import-file-into-r"><i class="fas fa-link"></i></a>
+</h3>
+<p>You have now the Excel file <code>ExcelGradeBook.xlsx</code> on our local hard disk.
+The next step is to import it into R.</p>
+<p>The recommended file format for working with dataset in R is the <code>.csv</code>
+(comma-separated-value) format: These files are plain text and not a
+proprietary format. To import <code>.csv</code> or other tabular data (tsv =
+tabulator separated files, fwf = fixed-width files or web log files) one
+uses the <strong>{readr}</strong> package, which is part or the tidyverse.</p>
+<p>Nowadays there is with <strong>{vroom}</strong> another implementation of delimited
+and fixed data to R. <a href="https://vroom.r-lib.org/">Vroom</a> is 25 times
+faster than <strong>{readr}</strong>, has almost all the parsing feature of
+<strong>{readr}</strong> and even other new features as well. Until today I haven’t
+seen many real life application with <strong>{vroom}</strong>: Either it is still too
+early or there are other consideration I do not know to keep using
+<strong>{readr}</strong>. One reason might that the speed advantages of <strong>{vroom}</strong>
+count only with very big datasets. The performance benchmark test for
+example was done with a 1.55 GB dataset. Following this assumption
+<strong>{readr}</strong> is still the predominant file package for reading in
+delimited and fixed data to R.</p>
+<p>However, data won’t always come in the preferred <code>.csv</code> file format.
+This walkthrough imports an Excel file because these file types, with
+the <code>.xlsx</code> or <code>.xls</code> extensions, are very likely to be encountered in
+the K-12 education world.</p>
+<p>The book code uses the <code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code> function of the <strong>{readxl}</strong>
+package to read the data of the locally stored file
+(<code>ExcelGradeBook.xlsx</code>). <strong>{readxl}</strong> is part of the tidyverse and
+supplements <strong>{readr}</strong>, the main tidyverse program for data import. The
+<code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code> functions determines if the format is the legacy <code>.xls</code>
+or the modern xml-based <code>.xlsx</code> format. Because of the file extension we
+know that <code>ExcelGradeBook.xlsx</code> is in <code>.xlsx</code> format, we could also use
+the slightly faster <code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_xlsx()</a></code>.</p>
+<div class="infobox">
+<p>Use the <strong>{readODS}</strong> package for reading and writing OpenDocument
+Spreedsheets (ODS files). ODS files are derived from the Open Document
+Format (ODF), an OpenSource ISO-certifacted standard for office
+applications.</p>
+<p>OpenSource software like <a href="https://www.libreoffice.org/">LibreOffice</a>
+uses this standard. It is the OpenSource alternative for the proprietary
+Microsoft file format.</p>
+</div>
+</div>
+<div id="inspect-file" class="section level3" number="3.2.3">
+<h3>
+<span class="header-section-number">3.2.3</span> Inspect file<a class="anchor" aria-label="anchor" href="#inspect-file"><i class="fas fa-link"></i></a>
+</h3>
+<p>One necessary step during the import procedure is to inspect the file. The
+inspection is necessary to know about the structure of the dataset. There are at least
+three possible ways to do this:</p>
+<ol style="list-style-type: decimal">
+<li>Using R code — as the book demonstrates — to inspect the file.</li>
+<li>Using appropriate software to open the file and inspect it.</li>
+<li>Using RStudio interactive dataset importing tools under the menu
+“File” -&gt; “Import dataset” -&gt; “From Excel….”</li>
+</ol>
+<p>For demonstrative purposes we are going to apply all three options.</p>
+<div id="using-r-code" class="section level4" number="3.2.3.1">
+<h4>
+<span class="header-section-number">3.2.3.1</span> Using R code<a class="anchor" aria-label="anchor" href="#using-r-code"><i class="fas fa-link"></i></a>
+</h4>
+<p>We will use for the local file path again here() and load “ExcelGradeBook.xlsx” into the R object <code>ExcelGradeBook</code>. As the book suggests we will make a copy with a better name (<code>gradebook</code>), that is easier to remember and type. We will later on work with this copy and have leave the original as a backup if anything goes wrong.</p>
+</div>
+<div id="standard-printing" class="section level4" number="3.2.3.2">
+<h4>
+<span class="header-section-number">3.2.3.2</span> Standard printing<a class="anchor" aria-label="anchor" href="#standard-printing"><i class="fas fa-link"></i></a>
+</h4>
+<p>Then we display the content of <code>gradebook</code> to inspect its content.</p>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Use readxl package to read and import file and assign it a name</span>
+<span class="va">ExcelGradeBook</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"data"</span>, 
+         <span class="st">"gradebooks"</span>, 
+         <span class="st">"ExcelGradeBook.xlsx"</span><span class="op">)</span>
+  <span class="op">)</span>
+<span class="co">#&gt; New names:</span>
+<span class="co">#&gt; * `` -&gt; ...1</span>
+<span class="co">#&gt; * `` -&gt; ...3</span>
+<span class="co">#&gt; * `` -&gt; ...4</span>
+<span class="co">#&gt; * `` -&gt; ...5</span>
+<span class="co">#&gt; * `` -&gt; ...6</span>
+<span class="co">#&gt; * ...</span>
+
+<span class="co"># Copy R object to have a working file and a backup</span>
+<span class="va">gradebook</span> <span class="op">&lt;-</span> <span class="va">ExcelGradeBook</span> 
+<span class="va">gradebook</span>
+<span class="co">#&gt; # A tibble: 43 × 63</span>
+<span class="co">#&gt;    ...1  `Assessment Type` ...3  ...4   ...5  ...6  ...7  ...8  ...9  ...10</span>
+<span class="co">#&gt;    &lt;chr&gt; &lt;chr&gt;             &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;</span>
+<span class="co">#&gt;  1 &lt;NA&gt;  Points            &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt;  2 &lt;NA&gt;  Point Multiplier  &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt;  3 &lt;NA&gt;  Date              &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt;  4 &lt;NA&gt;  &lt;NA&gt;              &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt;  5 A-    90                &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt;  6 B-    80                &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt;  7 C-    70                &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt;  8 D-    60                &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt;  9 F:    0                 &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; 10 Class Name              Race  Gender Age   Repe… Fina… Abse… Late  Make…</span>
+<span class="co">#&gt; # … with 33 more rows, and 53 more variables: ...11 &lt;chr&gt;, ...12 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   ...13 &lt;chr&gt;, ...14 &lt;chr&gt;, ...15 &lt;chr&gt;, ...16 &lt;chr&gt;, ...17 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   ...18 &lt;chr&gt;, Classworks...19 &lt;chr&gt;, Homeworks...20 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   Classworks...21 &lt;chr&gt;, Homeworks...22 &lt;chr&gt;, Classworks...23 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   Classworks...24 &lt;chr&gt;, Classworks...25 &lt;chr&gt;, Classworks...26 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   Homeworks...27 &lt;chr&gt;, Formative Assessments...28 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   Projects...29 &lt;chr&gt;, Classworks...30 &lt;chr&gt;, Homeworks...31 &lt;chr&gt;, …</span></code></pre></div>
+<p>Oops! What has happened here? If you inspect the content of the dataset
+you will learn that</p>
+<ul>
+<li>we’ve got a dataset with 43 columns and 63 rows</li>
+<li>without sensible columns names (R has warned us that it created many columns automatically)</li>
+<li>with 25 students under the heading of <code>Assessment Type</code>
+</li>
+<li>with many NA rows at the beginning but also at the end of the
+dataset.</li>
+</ul>
+<p>The reason for this strange structure is that someone has used the first
+9 lines of the Excel file for a note about the grading system. As
+important as this note may be, it runs counter the R assumption that the
+first line will be a row with the column names.</p>
+</div>
+<div id="using-print" class="section level4" number="3.2.3.3">
+<h4>
+<span class="header-section-number">3.2.3.3</span> Using <code>print()</code><a class="anchor" aria-label="anchor" href="#using-print"><i class="fas fa-link"></i></a>
+</h4>
+<p>Unfortunately the standard printing procedure of R with tibble datasets
+(a special sort of data frames in the <code>tidyverse</code>) limits the
+presentation of exact 10 rows per page. Therefore it is especially
+difficult to see what has happened. It would be better to see the whole
+dataset at once. This could be done with the <code><a href="https://rdrr.io/r/base/print.html">print()</a></code> command by stating explicitly how many rows are to print.</p>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">### print file with specifies row numbers: for instance</span>
+<span class="co">## print(gradebook, n = 100)</span>
+
+
+<span class="co">### or specify the number with the `nrow()` function</span>
+<span class="co">## print(gradebook, n = nrow(gradebook))</span>
+
+<span class="co">### the same code but with pipe operator</span>
+<span class="va">gradebook</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span> 
+<span class="co">#&gt; # A tibble: 43 × 63</span>
+<span class="co">#&gt;    ...1  `Assessment Type` ...3  ...4   ...5  ...6  ...7  ...8  ...9  ...10</span>
+<span class="co">#&gt;    &lt;chr&gt; &lt;chr&gt;             &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;</span>
+<span class="co">#&gt;  1 &lt;NA&gt;  Points            &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt;  2 &lt;NA&gt;  Point Multiplier  &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt;  3 &lt;NA&gt;  Date              &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt;  4 &lt;NA&gt;  &lt;NA&gt;              &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt;  5 A-    90                &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt;  6 B-    80                &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt;  7 C-    70                &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt;  8 D-    60                &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt;  9 F:    0                 &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; 10 Class Name              Race  Gender Age   Repe… Fina… Abse… Late  Make…</span>
+<span class="co">#&gt; 11 1     Student 1         &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  1     0     &lt;NA&gt; </span>
+<span class="co">#&gt; 12 1     Student 2         &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  0     1     &lt;NA&gt; </span>
+<span class="co">#&gt; 13 1     Student 3         &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  2     0     &lt;NA&gt; </span>
+<span class="co">#&gt; 14 1     Student 4         &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  0     0     &lt;NA&gt; </span>
+<span class="co">#&gt; 15 1     Student 5         &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  0     0     &lt;NA&gt; </span>
+<span class="co">#&gt; 16 1     Student 6         &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  0     0     &lt;NA&gt; </span>
+<span class="co">#&gt; 17 1     Student 7         &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  0     0     &lt;NA&gt; </span>
+<span class="co">#&gt; 18 1     Student 8         &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  0     0     &lt;NA&gt; </span>
+<span class="co">#&gt; 19 1     Student 9         &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  0     0     &lt;NA&gt; </span>
+<span class="co">#&gt; 20 1     Student 10        &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; 21 1     Student 11        &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; 22 1     Student 12        &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; 23 1     Student 13        &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; 24 1     Student 14        &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; 25 1     Student 15        &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; 26 1     Student 16        &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; 27 1     Student 17        &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; 28 1     Student 18        &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; 29 1     Student 19        &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; 30 1     Student 20        &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; 31 1     Student 21        &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; 32 1     Student 22        &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; 33 1     Student 23        &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; 34 1     Student 24        &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; 35 1     Student 25        &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  No m… No m… &lt;NA&gt; </span>
+<span class="co">#&gt; 36 &lt;NA&gt;  &lt;NA&gt;              &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; 37 &lt;NA&gt;  &lt;NA&gt;              &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; 38 &lt;NA&gt;  &lt;NA&gt;              &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; 39 &lt;NA&gt;  &lt;NA&gt;              &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; 40 &lt;NA&gt;  &lt;NA&gt;              &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; 41 &lt;NA&gt;  &lt;NA&gt;              &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; 42 &lt;NA&gt;  &lt;NA&gt;              &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; 43 &lt;NA&gt;  &lt;NA&gt;              &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span>
+<span class="co">#&gt; # … with 53 more variables: ...11 &lt;chr&gt;, ...12 &lt;chr&gt;, ...13 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   ...14 &lt;chr&gt;, ...15 &lt;chr&gt;, ...16 &lt;chr&gt;, ...17 &lt;chr&gt;, ...18 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   Classworks...19 &lt;chr&gt;, Homeworks...20 &lt;chr&gt;, Classworks...21 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   Homeworks...22 &lt;chr&gt;, Classworks...23 &lt;chr&gt;, Classworks...24 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   Classworks...25 &lt;chr&gt;, Classworks...26 &lt;chr&gt;, Homeworks...27 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   Formative Assessments...28 &lt;chr&gt;, Projects...29 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   Classworks...30 &lt;chr&gt;, Homeworks...31 &lt;chr&gt;, Projects...32 &lt;chr&gt;, …</span></code></pre></div>
+</div>
+<div id="using-paged_table" class="section level4" number="3.2.3.4">
+<h4>
+<span class="header-section-number">3.2.3.4</span> Using <code>paged_table()</code><a class="anchor" aria-label="anchor" href="#using-paged_table"><i class="fas fa-link"></i></a>
+</h4>
+<p>Another option to inspect the whole dataset with R is:</p>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">gradebook</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> <span class="fu">rmarkdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgs.rstudio.com/rmarkdown/reference/paged_table.html">paged_table</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["...1"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Assessment Type"],"name":[2],"type":["chr"],"align":["left"]},{"label":["...3"],"name":[3],"type":["chr"],"align":["left"]},{"label":["...4"],"name":[4],"type":["chr"],"align":["left"]},{"label":["...5"],"name":[5],"type":["chr"],"align":["left"]},{"label":["...6"],"name":[6],"type":["chr"],"align":["left"]},{"label":["...7"],"name":[7],"type":["chr"],"align":["left"]},{"label":["...8"],"name":[8],"type":["chr"],"align":["left"]},{"label":["...9"],"name":[9],"type":["chr"],"align":["left"]},{"label":["...10"],"name":[10],"type":["chr"],"align":["left"]},{"label":["...11"],"name":[11],"type":["chr"],"align":["left"]},{"label":["...12"],"name":[12],"type":["chr"],"align":["left"]},{"label":["...13"],"name":[13],"type":["chr"],"align":["left"]},{"label":["...14"],"name":[14],"type":["chr"],"align":["left"]},{"label":["...15"],"name":[15],"type":["chr"],"align":["left"]},{"label":["...16"],"name":[16],"type":["chr"],"align":["left"]},{"label":["...17"],"name":[17],"type":["chr"],"align":["left"]},{"label":["...18"],"name":[18],"type":["chr"],"align":["left"]},{"label":["Classworks...19"],"name":[19],"type":["chr"],"align":["left"]},{"label":["Homeworks...20"],"name":[20],"type":["chr"],"align":["left"]},{"label":["Classworks...21"],"name":[21],"type":["chr"],"align":["left"]},{"label":["Homeworks...22"],"name":[22],"type":["chr"],"align":["left"]},{"label":["Classworks...23"],"name":[23],"type":["chr"],"align":["left"]},{"label":["Classworks...24"],"name":[24],"type":["chr"],"align":["left"]},{"label":["Classworks...25"],"name":[25],"type":["chr"],"align":["left"]},{"label":["Classworks...26"],"name":[26],"type":["chr"],"align":["left"]},{"label":["Homeworks...27"],"name":[27],"type":["chr"],"align":["left"]},{"label":["Formative Assessments...28"],"name":[28],"type":["chr"],"align":["left"]},{"label":["Projects...29"],"name":[29],"type":["chr"],"align":["left"]},{"label":["Classworks...30"],"name":[30],"type":["chr"],"align":["left"]},{"label":["Homeworks...31"],"name":[31],"type":["chr"],"align":["left"]},{"label":["Projects...32"],"name":[32],"type":["chr"],"align":["left"]},{"label":["Classworks...33"],"name":[33],"type":["chr"],"align":["left"]},{"label":["Homeworks...34"],"name":[34],"type":["chr"],"align":["left"]},{"label":["Projects...35"],"name":[35],"type":["chr"],"align":["left"]},{"label":["Homeworks...36"],"name":[36],"type":["chr"],"align":["left"]},{"label":["Classworks...37"],"name":[37],"type":["chr"],"align":["left"]},{"label":["Homeworks...38"],"name":[38],"type":["chr"],"align":["left"]},{"label":["Homeworks...39"],"name":[39],"type":["chr"],"align":["left"]},{"label":["Projects...40"],"name":[40],"type":["chr"],"align":["left"]},{"label":["Projects...41"],"name":[41],"type":["chr"],"align":["left"]},{"label":["Formative Assessments...42"],"name":[42],"type":["chr"],"align":["left"]},{"label":["Projects...43"],"name":[43],"type":["chr"],"align":["left"]},{"label":["Classworks...44"],"name":[44],"type":["chr"],"align":["left"]},{"label":["Homeworks...45"],"name":[45],"type":["chr"],"align":["left"]},{"label":["Classworks...46"],"name":[46],"type":["chr"],"align":["left"]},{"label":["Homeworks...47"],"name":[47],"type":["chr"],"align":["left"]},{"label":["Classworks...48"],"name":[48],"type":["chr"],"align":["left"]},{"label":["Classworks...49"],"name":[49],"type":["chr"],"align":["left"]},{"label":["Projects...50"],"name":[50],"type":["chr"],"align":["left"]},{"label":["Classworks...51"],"name":[51],"type":["chr"],"align":["left"]},{"label":["Classworks...52"],"name":[52],"type":["chr"],"align":["left"]},{"label":["Homeworks...53"],"name":[53],"type":["chr"],"align":["left"]},{"label":["Formative Assessments...54"],"name":[54],"type":["chr"],"align":["left"]},{"label":["Classworks...55"],"name":[55],"type":["chr"],"align":["left"]},{"label":["Homeworks...56"],"name":[56],"type":["chr"],"align":["left"]},{"label":["Classworks...57"],"name":[57],"type":["chr"],"align":["left"]},{"label":["Homeworks...58"],"name":[58],"type":["chr"],"align":["left"]},{"label":["Projects...59"],"name":[59],"type":["chr"],"align":["left"]},{"label":["Projects...60"],"name":[60],"type":["chr"],"align":["left"]},{"label":["Projects...61"],"name":[61],"type":["chr"],"align":["left"]},{"label":["Summative Assessments"],"name":[62],"type":["chr"],"align":["left"]},{"label":["...63"],"name":[63],"type":["chr"],"align":["left"]}],"data":[{"1":"NA","2":"Points","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"Percentage Breakdown By Assessment Type","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA","19":"15","20":"10","21":"15","22":"5","23":"15","24":"15","25":"15","26":"15","27":"10","28":"50","29":"10","30":"15","31":"10","32":"10","33":"15","34":"5","35":"10","36":"5","37":"15","38":"10","39":"10","40":"10","41":"10","42":"50","43":"10","44":"15","45":"10","46":"15","47":"5","48":"15","49":"15","50":"10","51":"15","52":"15","53":"10","54":"50","55":"15","56":"10","57":"15","58":"5","59":"10","60":"10","61":"10","62":"30","63":"NA"},{"1":"NA","2":"Point Multiplier","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA","19":"1","20":"1","21":"1","22":"1","23":"1","24":"1","25":"1","26":"1","27":"1","28":"1","29":"1","30":"1","31":"1","32":"1","33":"1","34":"1","35":"1","36":"1","37":"1","38":"1","39":"1","40":"1","41":"1","42":"1","43":"1","44":"1","45":"1","46":"1","47":"1","48":"1","49":"1","50":"1","51":"1","52":"1","53":"1","54":"1","55":"1","56":"1","57":"1","58":"1","59":"1","60":"1","61":"1","62":"1","63":"1"},{"1":"NA","2":"Date","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"0.15","14":"0.15","15":"0.15","16":"0.35","17":"0.2","18":"0","19":"43485","20":"43485","21":"43488","22":"43491","23":"43492","24":"43493","25":"43494","26":"43495","27":"43495","28":"43496","29":"43498","30":"43499","31":"43501","32":"43502","33":"43503","34":"43503","35":"43505","36":"43505","37":"43506","38":"43507","39":"43509","40":"43509","41":"43510","42":"43512","43":"43514","44":"43515","45":"43516","46":"43519","47":"43521","48":"43524","49":"43528","50":"43529","51":"43530","52":"43533","53":"43535","54":"43535","55":"43537","56":"43539","57":"43542","58":"43543","59":"43545","60":"43547","61":"43549","62":"43552","63":"NA"},{"1":"NA","2":"NA","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA","19":"NA","20":"NA","21":"NA","22":"NA","23":"NA","24":"NA","25":"NA","26":"NA","27":"NA","28":"NA","29":"NA","30":"NA","31":"NA","32":"NA","33":"NA","34":"NA","35":"NA","36":"NA","37":"NA","38":"NA","39":"NA","40":"NA","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"NA","51":"NA","52":"NA","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"NA","59":"NA","60":"NA","61":"NA","62":"NA","63":"NA"},{"1":"A-","2":"90","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"8","12":"NA","13":"5","14":"7","15":"8","16":"17","17":"12","18":"0","19":"6","20":"21","21":"NA","22":"13","23":"NA","24":"NA","25":"NA","26":"NA","27":"NA","28":"10","29":"20","30":"NA","31":"NA","32":"NA","33":"NA","34":"NA","35":"NA","36":"12","37":"9","38":"11","39":"15","40":"23","41":"17","42":"NA","43":"NA","44":"15","45":"11","46":"20","47":"9","48":"8","49":"13","50":"NA","51":"15","52":"17","53":"25","54":"13","55":"17","56":"17","57":"11","58":"8","59":"19","60":"17","61":"19","62":"12","63":"0"},{"1":"B-","2":"80","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"12","12":"NA","13":"5","14":"8","15":"10","16":"8","17":"7","18":"0","19":"4","20":"4","21":"NA","22":"11","23":"NA","24":"NA","25":"NA","26":"NA","27":"NA","28":"5","29":"1","30":"NA","31":"NA","32":"NA","33":"NA","34":"NA","35":"NA","36":"6","37":"3","38":"2","39":"1","40":"2","41":"8","42":"NA","43":"NA","44":"5","45":"0","46":"5","47":"1","48":"4","49":"7","50":"NA","51":"8","52":"7","53":"0","54":"8","55":"6","56":"1","57":"2","58":"3","59":"6","60":"3","61":"6","62":"7","63":"0"},{"1":"C-","2":"70","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"5","12":"NA","13":"7","14":"10","15":"5","16":"0","17":"5","18":"0","19":"5","20":"0","21":"NA","22":"0","23":"NA","24":"NA","25":"NA","26":"NA","27":"NA","28":"6","29":"4","30":"NA","31":"NA","32":"NA","33":"NA","34":"NA","35":"NA","36":"0","37":"2","38":"1","39":"2","40":"0","41":"0","42":"NA","43":"NA","44":"0","45":"0","46":"0","47":"0","48":"0","49":"1","50":"NA","51":"2","52":"0","53":"0","54":"4","55":"0","56":"2","57":"1","58":"0","59":"0","60":"5","61":"0","62":"5","63":"0"},{"1":"D-","2":"60","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"0","12":"NA","13":"7","14":"0","15":"2","16":"0","17":"0","18":"0","19":"3","20":"0","21":"NA","22":"0","23":"NA","24":"NA","25":"NA","26":"NA","27":"NA","28":"1","29":"0","30":"NA","31":"NA","32":"NA","33":"NA","34":"NA","35":"NA","36":"2","37":"3","38":"2","39":"2","40":"0","41":"0","42":"NA","43":"NA","44":"3","45":"1","46":"0","47":"1","48":"3","49":"4","50":"NA","51":"0","52":"1","53":"0","54":"0","55":"2","56":"2","57":"2","58":"7","59":"0","60":"0","61":"0","62":"0","63":"0"},{"1":"F:","2":"0","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"0","12":"NA","13":"1","14":"0","15":"0","16":"0","17":"1","18":"0","19":"7","20":"0","21":"NA","22":"0","23":"NA","24":"NA","25":"NA","26":"NA","27":"NA","28":"3","29":"0","30":"NA","31":"NA","32":"NA","33":"NA","34":"NA","35":"NA","36":"5","37":"8","38":"9","39":"5","40":"0","41":"0","42":"NA","43":"NA","44":"2","45":"13","46":"0","47":"14","48":"10","49":"0","50":"NA","51":"0","52":"0","53":"0","54":"0","55":"0","56":"3","57":"9","58":"7","59":"0","60":"0","61":"0","62":"1","63":"0"},{"1":"Class","2":"Name","3":"Race","4":"Gender","5":"Age","6":"Repeated Grades","7":"Financial Status","8":"Absent","9":"Late","10":"Make your own categories","11":"Running Average","12":"Letter Grade","13":"Homeworks","14":"Classworks","15":"Formative Assessments","16":"Projects","17":"Summative Assessments","18":"Another Type 2","19":"Classwork 1","20":"Homework 1","21":"Classwork 2","22":"Homework 2","23":"Classwork 3","24":"Classwork 4","25":"Classwork 5","26":"Classwork 6","27":"Homework 3","28":"Formative Assessment 1","29":"Project 1","30":"Classwork 7","31":"Homework 4","32":"Project 2","33":"Classwork 8","34":"Homework 5","35":"Project 3","36":"Homework 6","37":"Classwork 9","38":"Homework 7","39":"Homework 8","40":"Project 4","41":"Project 5","42":"Formative Assessment 2","43":"Project 6","44":"Classwork 10","45":"Homework 9","46":"Classwork 11","47":"Homework 10","48":"Classwork 12","49":"Classwork 13","50":"Project 7","51":"Classwork 14","52":"Classwork 15","53":"Homework 11","54":"Summative Assessment 1","55":"Classwork 16","56":"Homework 12","57":"Classwork 17","58":"Homework 13","59":"Project 8","60":"Project 9","61":"Project 10","62":"Summative Assessment 2","63":"Assessment | Insert new columns before here"},{"1":"1","2":"Student 1","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"1","9":"0","10":"NA","11":"99.3823529411765","12":"A+","13":"100","14":"99.2156862745098","15":"96.6666666666667","16":"100","17":"100","18":"NA","19":"13","20":"10","21":"15","22":"5","23":"15","24":"15","25":"15","26":"15","27":"10","28":"45","29":"10","30":"15","31":"10","32":"10","33":"15","34":"5","35":"10","36":"5","37":"15","38":"10","39":"10","40":"10","41":"10","42":"50","43":"10","44":"15","45":"10","46":"15","47":"5","48":"15","49":"15","50":"10","51":"15","52":"15","53":"10","54":"50","55":"15","56":"10","57":"15","58":"5","59":"10","60":"10","61":"10","62":"30","63":"NA"},{"1":"1","2":"Student 2","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"0","9":"1","10":"NA","11":"79.3519607843137","12":"C+","13":"53.3333333333333","14":"88.2352941176471","15":"86.6666666666667","16":"87","17":"73.3333333333333","18":"NA","19":"10","20":"9","21":"12","22":"4","23":"15","24":"12","25":"15","26":"15","27":"7","28":"44","29":"9","30":"11","31":"3","32":"10","33":"15","34":"0","35":"10","36":"4","37":"15","38":"0","39":"4","40":"9","41":"8","42":"46","43":"10","44":"12","45":"0","46":"15","47":"3","48":"6","49":"14","50":"5","51":"15","52":"15","53":"10","54":"40","55":"15","56":"9","57":"13","58":"3","59":"9","60":"7","61":"10","62":"22","63":"NA"},{"1":"1","2":"Student 3","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"2","9":"0","10":"NA","11":"86.65","12":"B+","13":"62","14":"88.3333333333333","15":"93.3333333333333","16":"86","17":"100","18":"NA","19":"10","20":"9","21":"12","22":"Excused","23":"Excused","24":"12","25":"15","26":"15","27":"7","28":"50","29":"9","30":"14","31":"3","32":"10","33":"15","34":"3","35":"10","36":"5","37":"15","38":"1","39":"4","40":"9","41":"8","42":"50","43":"8","44":"10","45":"3","46":"15","47":"4","48":"6","49":"14","50":"7","51":"14","52":"15","53":"10","54":"40","55":"15","56":"10","57":"15","58":"3","59":"9","60":"7","61":"9","62":"30","63":"NA"},{"1":"1","2":"Student 4","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"0","9":"0","10":"NA","11":"80.2235294117647","12":"B-","13":"60","14":"78.8235294117647","15":"84","16":"88","17":"80","18":"NA","19":"10","20":"9","21":"5","22":"4","23":"15","24":"12","25":"15","26":"15","27":"7","28":"40","29":"9","30":"13","31":"3","32":"10","33":"15","34":"2","35":"10","36":"4","37":"15","38":"3","39":"4","40":"10","41":"10","42":"46","43":"9","44":"9","45":"3","46":"15","47":"2","48":"6","49":"9","50":"5","51":"11","52":"15","53":"10","54":"40","55":"13","56":"9","57":"8","58":"3","59":"9","60":"8","61":"8","62":"24","63":"NA"},{"1":"1","2":"Student 5","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"0","9":"0","10":"NA","11":"86.5081232492997","12":"B+","13":"72.3809523809524","14":"74.1176470588235","15":"86.6666666666667","16":"92","17":"96.6666666666667","18":"NA","19":"7","20":"10","21":"11","22":"5","23":"8","24":"12","25":"7","26":"12","27":"10","28":"39","29":"10","30":"13","31":"5","32":"10","33":"15","34":"0","35":"10","36":"4","37":"14","38":"8","39":"9","40":"10","41":"10","42":"41","43":"10","44":"13","45":"3","46":"13","47":"1","48":"4","49":"13","50":"6","51":"15","52":"15","53":"9","54":"50","55":"15","56":"9","57":"2","58":"3","59":"8","60":"8","61":"10","62":"29","63":"NA"},{"1":"1","2":"Student 6","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"0","9":"0","10":"NA","11":"83.7872549019608","12":"B","13":"80","14":"76.4705882352941","15":"79.3333333333333","16":"85","17":"93.3333333333333","18":"NA","19":"14","20":"9","21":"8","22":"4","23":"6","24":"12","25":"7","26":"15","27":"10","28":"36","29":"10","30":"15","31":"9","32":"7","33":"15","34":"2","35":"9","36":"5","37":"13","38":"10","39":"10","40":"9","41":"9","42":"41","43":"9","44":"8","45":"1","46":"15","47":"1","48":"8","49":"12","50":"6","51":"11","52":"14","53":"9","54":"42","55":"13","56":"10","57":"9","58":"4","59":"8","60":"9","61":"9","62":"28","63":"NA"},{"1":"1","2":"Student 7","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"0","9":"0","10":"NA","11":"84.7556022408964","12":"B","13":"87.6190476190476","14":"76.8627450980392","15":"81.3333333333333","16":"93","17":"76.6666666666667","18":"NA","19":"11","20":"9","21":"11","22":"4","23":"13","24":"14","25":"14","26":"12","27":"10","28":"41","29":"10","30":"13","31":"10","32":"9","33":"15","34":"3","35":"10","36":"5","37":"9","38":"10","39":"10","40":"10","41":"9","42":"37","43":"10","44":"8","45":"10","46":"12","47":"1","48":"8","49":"12","50":"9","51":"12","52":"15","53":"10","54":"44","55":"15","56":"10","57":"2","58":"0","59":"9","60":"9","61":"8","62":"23","63":"NA"},{"1":"1","2":"Student 8","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"0","9":"0","10":"NA","11":"90.1767507002801","12":"A-","13":"85.7142857142857","14":"82.3529411764706","15":"89.3333333333333","16":"94","17":"93.3333333333333","18":"NA","19":"7","20":"10","21":"5","22":"4","23":"6","24":"14","25":"10","26":"8","27":"9","28":"41","29":"10","30":"15","31":"9","32":"9","33":"15","34":"1","35":"9","36":"4","37":"11","38":"10","39":"9","40":"10","41":"9","42":"43","43":"10","44":"15","45":"9","46":"15","47":"5","48":"15","49":"15","50":"10","51":"15","52":"15","53":"10","54":"50","55":"15","56":"9","57":"14","58":"1","59":"8","60":"9","61":"10","62":"28","63":"NA"},{"1":"1","2":"Student 9","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"0","9":"0","10":"NA","11":"92.2634453781513","12":"A-","13":"94.2857142857143","14":"83.1372549019608","15":"82.6666666666667","16":"95","17":"100","18":"NA","19":"5","20":"10","21":"5","22":"4","23":"14","24":"15","25":"10","26":"8","27":"10","28":"38","29":"8","30":"13","31":"9","32":"9","33":"15","34":"3","35":"10","36":"4","37":"8","38":"9","39":"10","40":"9","41":"10","42":"36","43":"9","44":"14","45":"10","46":"15","47":"5","48":"15","49":"15","50":"10","51":"15","52":"15","53":"10","54":"50","55":"15","56":"10","57":"15","58":"5","59":"10","60":"10","61":"10","62":"30","63":"NA"},{"1":"1","2":"Student 10","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"84.5361344537815","12":"B","13":"90.4761904761905","14":"71.7647058823529","15":"70.6666666666667","16":"96","17":"80","18":"NA","19":"8","20":"10","21":"6","22":"4","23":"15","24":"15","25":"9","26":"9","27":"10","28":"42","29":"10","30":"12","31":"10","32":"9","33":"15","34":"3","35":"10","36":"5","37":"8","38":"10","39":"10","40":"9","41":"10","42":"28","43":"10","44":"10","45":"10","46":"12","47":"0","48":"13","49":"9","50":"9","51":"12","52":"13","53":"10","54":"36","55":"15","56":"10","57":"2","58":"3","59":"10","60":"9","61":"10","62":"24","63":"NA"},{"1":"1","2":"Student 11","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"90.478431372549","12":"A-","13":"86.6666666666667","14":"96.078431372549","15":"94.6666666666667","16":"92","17":"83.3333333333333","18":"NA","19":"15","20":"9","21":"14","22":"5","23":"15","24":"15","25":"15","26":"15","27":"10","28":"50","29":"10","30":"15","31":"9","32":"10","33":"15","34":"5","35":"9","36":"0","37":"10","38":"9","39":"9","40":"10","41":"10","42":"37","43":"8","44":"15","45":"9","46":"14","47":"5","48":"15","49":"15","50":"10","51":"13","52":"14","53":"10","54":"55","55":"15","56":"9","57":"15","58":"2","59":"8","60":"9","61":"8","62":"25","63":"NA"},{"1":"1","2":"Student 12","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"83.7822128851541","12":"B","13":"83.8095238095238","14":"75.2941176470588","15":"84.6666666666667","16":"93","17":"73.3333333333333","18":"NA","19":"12","20":"9","21":"14","22":"5","23":"9","24":"15","25":"6","26":"6","27":"9","28":"35","29":"9","30":"11","31":"10","32":"10","33":"15","34":"2","35":"9","36":"1","37":"12","38":"10","39":"9","40":"10","41":"9","42":"47","43":"9","44":"15","45":"9","46":"15","47":"2","48":"8","49":"9","50":"9","51":"13","52":"13","53":"9","54":"45","55":"15","56":"9","57":"4","58":"4","59":"10","60":"10","61":"8","62":"22","63":"NA"},{"1":"1","2":"Student 13","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"95.5694677871149","12":"A","13":"97.1428571428571","14":"91.7647058823529","15":"100","16":"94","17":"96.6666666666667","18":"NA","19":"11","20":"9","21":"5","22":"5","23":"15","24":"13","25":"15","26":"15","27":"9","28":"50","29":"9","30":"15","31":"10","32":"10","33":"15","34":"5","35":"10","36":"5","37":"15","38":"9","39":"10","40":"9","41":"9","42":"50","43":"9","44":"15","45":"10","46":"14","47":"5","48":"15","49":"13","50":"9","51":"15","52":"13","53":"9","54":"50","55":"15","56":"10","57":"15","58":"6","59":"9","60":"10","61":"10","62":"29","63":"NA"},{"1":"1","2":"Student 14","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"78.7851540616247","12":"C+","13":"63.8095238095238","14":"70.9803921568628","15":"69.3333333333333","16":"90","17":"83.3333333333333","18":"NA","19":"5","20":"9","21":"7","22":"4","23":"13","24":"13","25":"5","26":"13","27":"9","28":"28","29":"7","30":"15","31":"9","32":"9","33":"15","34":"5","35":"9","36":"2","37":"5","38":"1","39":"4","40":"9","41":"8","42":"30","43":"10","44":"15","45":"6","46":"13","47":"2","48":"4","49":"10","50":"10","51":"12","52":"15","53":"10","54":"46","55":"14","56":"5","57":"7","58":"1","59":"10","60":"8","61":"10","62":"25","63":"NA"},{"1":"1","2":"Student 15","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"80.5809523809524","12":"B-","13":"71.4285714285714","14":"80","15":"78.6666666666667","16":"84","17":"83.3333333333333","18":"NA","19":"13","20":"8","21":"14","22":"4","23":"14","24":"13","25":"9","26":"6","27":"9","28":"34","29":"7","30":"11","31":"6","32":"10","33":"15","34":"4","35":"10","36":"3","37":"7","38":"6","39":"8","40":"8","41":"8","42":"42","43":"9","44":"15","45":"10","46":"15","47":"0","48":"12","49":"12","50":"7","51":"15","52":"13","53":"9","54":"42","55":"12","56":"8","57":"8","58":"0","59":"9","60":"7","61":"9","62":"25","63":"NA"},{"1":"1","2":"Student 16","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"82.1796918767507","12":"B-","13":"72.3809523809524","14":"84.7058823529412","15":"67.3333333333333","16":"91","17":"83.3333333333333","18":"NA","19":"15","20":"10","21":"11","22":"4","23":"10","24":"15","25":"8","26":"7","27":"7","28":"25","29":"10","30":"12","31":"8","32":"10","33":"15","34":"5","35":"10","36":"1","37":"8","38":"7","39":"9","40":"9","41":"8","42":"32","43":"10","44":"15","45":"3","46":"15","47":"5","48":"15","49":"15","50":"10","51":"15","52":"15","53":"10","54":"44","55":"10","56":"4","57":"15","58":"3","59":"9","60":"7","61":"8","62":"25","63":"NA"},{"1":"1","2":"Student 17","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"92.8519140989729","12":"A-","13":"72.3809523809524","14":"98.0392156862745","15":"96","16":"97.7777777777778","17":"93.3333333333333","18":"NA","19":"15","20":"8","21":"13","22":"5","23":"15","24":"15","25":"15","26":"15","27":"7","28":"48","29":"10","30":"13","31":"1","32":"Excused","33":"15","34":"5","35":"10","36":"5","37":"15","38":"4","39":"9","40":"10","41":"9","42":"46","43":"10","44":"15","45":"2","46":"15","47":"5","48":"15","49":"15","50":"10","51":"15","52":"15","53":"10","54":"50","55":"14","56":"10","57":"15","58":"5","59":"10","60":"10","61":"9","62":"28","63":"NA"},{"1":"1","2":"Student 18","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"86.822268907563","12":"B+","13":"74.2857142857143","14":"76.8627450980392","15":"100","16":"89","17":"90","18":"NA","19":"8","20":"8","21":"8","22":"5","23":"6","24":"14","25":"8","26":"15","27":"9","28":"50","29":"7","30":"14","31":"10","32":"10","33":"15","34":"5","35":"8","36":"3","37":"11","38":"3","39":"7","40":"10","41":"10","42":"50","43":"10","44":"15","45":"10","46":"15","47":"0","48":"9","49":"15","50":"5","51":"14","52":"13","53":"9","54":"50","55":"15","56":"7","57":"1","58":"2","59":"9","60":"10","61":"10","62":"27","63":"NA"},{"1":"1","2":"Student 19","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"94.5570028011205","12":"A","13":"69.5238095238095","14":"89.4117647058824","15":"94","16":"97","17":"113.333333333333","18":"NA","19":"11","20":"9","21":"15","22":"4","23":"15","24":"15","25":"14","26":"15","27":"0","28":"50","29":"10","30":"13","31":"0","32":"10","33":"15","34":"5","35":"10","36":"0","37":"2","38":"6","39":"9","40":"10","41":"10","42":"44","43":"8","44":"15","45":"10","46":"15","47":"5","48":"13","49":"15","50":"10","51":"13","52":"14","53":"10","54":"47","55":"13","56":"10","57":"15","58":"5","59":"9","60":"10","61":"10","62":"34","63":"NA"},{"1":"1","2":"Student 20","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"78.8985994397759","12":"C+","13":"64.7619047619048","14":"80.7843137254902","15":"77.3333333333333","16":"88","17":"73.3333333333333","18":"NA","19":"15","20":"8","21":"13","22":"5","23":"9","24":"13","25":"11","26":"7","27":"10","28":"36","29":"10","30":"13","31":"10","32":"9","33":"15","34":"3","35":"10","36":"5","37":"9","38":"4","39":"5","40":"8","41":"8","42":"32","43":"9","44":"13","45":"2","46":"14","47":"0","48":"9","49":"13","50":"7","51":"13","52":"15","53":"9","54":"48","55":"13","56":"6","57":"11","58":"1","59":"8","60":"9","61":"10","62":"22","63":"NA"},{"1":"1","2":"Student 21","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"81.2831932773109","12":"B-","13":"70.4761904761905","14":"76.078431372549","15":"74","16":"92","17":"80","18":"NA","19":"11","20":"10","21":"8","22":"5","23":"10","24":"12","25":"12","26":"9","27":"7","28":"25","29":"7","30":"12","31":"7","32":"10","33":"15","34":"4","35":"10","36":"5","37":"8","38":"8","39":"6","40":"10","41":"8","42":"47","43":"10","44":"15","45":"3","46":"14","47":"0","48":"6","49":"11","50":"9","51":"13","52":"13","53":"10","54":"39","55":"12","56":"4","57":"13","58":"5","59":"9","60":"10","61":"9","62":"24","63":"NA"},{"1":"1","2":"Student 22","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"94.0819327731093","12":"A","13":"91.4285714285714","14":"94.1176470588235","15":"86.6666666666667","16":"95","17":"100","18":"NA","19":"8","20":"9","21":"12","22":"5","23":"15","24":"15","25":"13","26":"15","27":"10","28":"45","29":"10","30":"15","31":"10","32":"10","33":"15","34":"5","35":"10","36":"5","37":"15","38":"9","39":"10","40":"9","41":"8","42":"48","43":"8","44":"13","45":"3","46":"15","47":"5","48":"15","49":"15","50":"10","51":"15","52":"15","53":"10","54":"37","55":"14","56":"10","57":"15","58":"5","59":"10","60":"10","61":"10","62":"30","63":"NA"},{"1":"1","2":"Student 23","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"79.5759103641457","12":"C+","13":"68.5714285714286","14":"78.8235294117647","15":"84.6666666666667","16":"86","17":"73.3333333333333","18":"NA","19":"13","20":"10","21":"14","22":"5","23":"13","24":"14","25":"8","26":"11","27":"10","28":"47","29":"9","30":"15","31":"7","32":"9","33":"15","34":"4","35":"7","36":"5","37":"4","38":"3","39":"6","40":"9","41":"9","42":"40","43":"9","44":"14","45":"2","46":"13","47":"2","48":"13","49":"12","50":"8","51":"15","52":"12","53":"9","54":"40","55":"10","56":"6","57":"5","58":"3","59":"8","60":"10","61":"8","62":"22","63":"NA"},{"1":"1","2":"Student 24","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"89.3633053221289","12":"B+","13":"64.7619047619048","14":"92.5490196078431","15":"99.3333333333333","16":"92","17":"93.3333333333333","18":"NA","19":"15","20":"10","21":"15","22":"5","23":"15","24":"13","25":"15","26":"15","27":"9","28":"49","29":"10","30":"15","31":"3","32":"10","33":"15","34":"4","35":"10","36":"5","37":"13","38":"1","39":"9","40":"9","41":"9","42":"50","43":"9","44":"13","45":"2","46":"15","47":"0","48":"9","49":"15","50":"10","51":"15","52":"14","53":"9","54":"50","55":"15","56":"7","57":"9","58":"4","59":"9","60":"7","61":"9","62":"28","63":"NA"},{"1":"1","2":"Student 25","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"No match","9":"No match","10":"NA","11":"79.2773109243698","12":"C+","13":"70.4761904761905","14":"91.3725490196078","15":"85.3333333333334","16":"92","17":"50","18":"NA","19":"11","20":"10","21":"14","22":"5","23":"15","24":"15","25":"14","26":"14","27":"7","28":"39","29":"9","30":"15","31":"2","32":"10","33":"15","34":"5","35":"10","36":"4","37":"15","38":"9","39":"7","40":"10","41":"10","42":"50","43":"8","44":"15","45":"0","46":"15","47":"1","48":"5","49":"15","50":"5","51":"15","52":"10","53":"9","54":"39","55":"15","56":"10","57":"15","58":"5","59":"10","60":"10","61":"10","62":"15","63":"NA"},{"1":"NA","2":"NA","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA","19":"NA","20":"NA","21":"NA","22":"NA","23":"NA","24":"NA","25":"NA","26":"NA","27":"NA","28":"NA","29":"NA","30":"NA","31":"NA","32":"NA","33":"NA","34":"NA","35":"NA","36":"NA","37":"NA","38":"NA","39":"NA","40":"NA","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"NA","51":"NA","52":"NA","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"NA","59":"NA","60":"NA","61":"NA","62":"NA","63":"NA"},{"1":"NA","2":"NA","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA","19":"NA","20":"NA","21":"NA","22":"NA","23":"NA","24":"NA","25":"NA","26":"NA","27":"NA","28":"NA","29":"NA","30":"NA","31":"NA","32":"NA","33":"NA","34":"NA","35":"NA","36":"NA","37":"NA","38":"NA","39":"NA","40":"NA","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"NA","51":"NA","52":"NA","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"NA","59":"NA","60":"NA","61":"NA","62":"NA","63":"NA"},{"1":"NA","2":"NA","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA","19":"NA","20":"NA","21":"NA","22":"NA","23":"NA","24":"NA","25":"NA","26":"NA","27":"NA","28":"NA","29":"NA","30":"NA","31":"NA","32":"NA","33":"NA","34":"NA","35":"NA","36":"NA","37":"NA","38":"NA","39":"NA","40":"NA","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"NA","51":"NA","52":"NA","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"NA","59":"NA","60":"NA","61":"NA","62":"NA","63":"NA"},{"1":"NA","2":"NA","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA","19":"NA","20":"NA","21":"NA","22":"NA","23":"NA","24":"NA","25":"NA","26":"NA","27":"NA","28":"NA","29":"NA","30":"NA","31":"NA","32":"NA","33":"NA","34":"NA","35":"NA","36":"NA","37":"NA","38":"NA","39":"NA","40":"NA","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"NA","51":"NA","52":"NA","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"NA","59":"NA","60":"NA","61":"NA","62":"NA","63":"NA"},{"1":"NA","2":"NA","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA","19":"NA","20":"NA","21":"NA","22":"NA","23":"NA","24":"NA","25":"NA","26":"NA","27":"NA","28":"NA","29":"NA","30":"NA","31":"NA","32":"NA","33":"NA","34":"NA","35":"NA","36":"NA","37":"NA","38":"NA","39":"NA","40":"NA","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"NA","51":"NA","52":"NA","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"NA","59":"NA","60":"NA","61":"NA","62":"NA","63":"NA"},{"1":"NA","2":"NA","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA","19":"NA","20":"NA","21":"NA","22":"NA","23":"NA","24":"NA","25":"NA","26":"NA","27":"NA","28":"NA","29":"NA","30":"NA","31":"NA","32":"NA","33":"NA","34":"NA","35":"NA","36":"NA","37":"NA","38":"NA","39":"NA","40":"NA","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"NA","51":"NA","52":"NA","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"NA","59":"NA","60":"NA","61":"NA","62":"NA","63":"NA"},{"1":"NA","2":"NA","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA","19":"NA","20":"NA","21":"NA","22":"NA","23":"NA","24":"NA","25":"NA","26":"NA","27":"NA","28":"NA","29":"NA","30":"NA","31":"NA","32":"NA","33":"NA","34":"NA","35":"NA","36":"NA","37":"NA","38":"NA","39":"NA","40":"NA","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"NA","51":"NA","52":"NA","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"NA","59":"NA","60":"NA","61":"NA","62":"NA","63":"NA"},{"1":"NA","2":"NA","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA","19":"NA","20":"NA","21":"NA","22":"NA","23":"NA","24":"NA","25":"NA","26":"NA","27":"NA","28":"NA","29":"NA","30":"NA","31":"NA","32":"NA","33":"NA","34":"NA","35":"NA","36":"NA","37":"NA","38":"NA","39":"NA","40":"NA","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"NA","51":"NA","52":"NA","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"NA","59":"NA","60":"NA","61":"NA","62":"NA","63":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="rstudio-file-viewer" class="section level4" number="3.2.3.5">
+<h4>
+<span class="header-section-number">3.2.3.5</span> RStudio file viewer<a class="anchor" aria-label="anchor" href="#rstudio-file-viewer"><i class="fas fa-link"></i></a>
+</h4>
+<p>Finally you could also use RStudio intern file viewer at the console with <code>View(gradebook)</code> or programmatically with <code>view(gradebook)</code>. The following screenshot display the view via RStudio.</p>
+<p>To display the screenshot I used the chunk header together with the <code>include_graphics()</code> function of the <strong>{knitr}</strong> package.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode md"><code class="sourceCode markdown"><span id="cb46-1"><a href="classroom-gradebook.html#cb46-1" aria-hidden="true" tabindex="-1"></a>``<span class="in">`{r rstudio-screenshot-dataset, echo=FALSE, fig.cap='Screenshot of the dataset loaded with `</span>View(ExcelGradeBook)<span class="in">` into RStudio', out.width='95%', fig.align='center', fig.alt='Screenshot of the dataset loaded with `</span>View(ExcelGradeBook)` into RStudio showing that the dataset starts with line 10.', out.extra='class="shadow"'}</span>
+<span id="cb46-2"><a href="classroom-gradebook.html#cb46-2" aria-hidden="true" tabindex="-1"></a>knitr::include_graphics("img/inspect-file-with-code-min.png")</span>
+<span id="cb46-3"><a href="classroom-gradebook.html#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:rstudio-screenshot-dataset"></span>
+<img src="img/inspect-file-with-code-min.png" alt="Screenshot of the dataset loaded with `View(ExcelGradeBook)` into RStudio showing that the dataset starts with line 10." width="95%" class="shadow"><p class="caption">
+Figure 3.1: Screenshot of the dataset loaded with <code>View(ExcelGradeBook)</code> into RStudio
+</p>
+</div>
+</div>
+<div id="rstudio-import-dataset" class="section level4" number="3.2.3.6">
+<h4>
+<span class="header-section-number">3.2.3.6</span> RStudio import dataset<a class="anchor" aria-label="anchor" href="#rstudio-import-dataset"><i class="fas fa-link"></i></a>
+</h4>
+<p>Using the RStudio interface interactively is another very practical way of inspecting and importing data. In this case you need not to know the exact syntax of the R code. You also can see that there are several datasheets and can inspect their content. When RStudio is importing the dataset it will also write the code lines it has used into the console. You can copy it and use it in your script.</p>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:rstudio-import-data-interface"></span>
+<img src="img/screenshot-gradebook-rstudio-min.png" alt="Screenshot of the interactive interface of RStudio for importing datasets." width="95%" class="shadow"><p class="caption">
+Figure 3.2: Screenshot of the interactive interface of RStudio for importing datasets.
+</p>
+</div>
+</div>
+<div id="application-software" class="section level4" number="3.2.3.7">
+<h4>
+<span class="header-section-number">3.2.3.7</span> Application software<a class="anchor" aria-label="anchor" href="#application-software"><i class="fas fa-link"></i></a>
+</h4>
+<p>But all these possibilities gives you not the full information. Why are there empty (NA) rows at the end of the dataset? This information you could only get by opening the file with the appropriate software tool.</p>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:libreoffice-screenshot-dataset"></span>
+<img src="img/screenshot-gradebook-libre-office-min.png" alt="Screenshot of the dataset loaded into LibreOffice, showing that the dataset starts with line 10 and that at the end is other for the data analysis not relevant information." width="95%" class="shadow"><p class="caption">
+Figure 3.3: Screenshot of the dataset loaded into LibreOffice
+</p>
+</div>
+<p>The screenshot shows that there other datasheets as well, but just the first one is relevant for us. We also get an explication why there are so many NA’s rows after the dataset: We mentioned that we used a publicly available gradebook template. It happens that these templates have additional information on their first datasheet how to use the template.</p>
+</div>
+<div id="conclusion-1" class="section level4" number="3.2.3.8">
+<h4>
+<span class="header-section-number">3.2.3.8</span> Conclusion<a class="anchor" aria-label="anchor" href="#conclusion-1"><i class="fas fa-link"></i></a>
+</h4>
+<p>The gist of our extensive inspection:</p>
+<ul>
+<li>Skip the first 10 lines</li>
+<li>Read 26 line into R (25 student and the column headings)</li>
+<li>Use just the first sheet</li>
+</ul>
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Use readxl package to read and import file and assign it a name</span>
+<span class="va">ExcelGradeBook</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_xlsx</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"data"</span>, 
+         <span class="st">"gradebooks"</span>, 
+         <span class="st">"ExcelGradeBook.xlsx"</span><span class="op">)</span>,
+    sheet <span class="op">=</span> <span class="fl">1</span>,
+    skip <span class="op">=</span> <span class="fl">10</span>,
+    n_max <span class="op">=</span> <span class="fl">26</span>
+  <span class="op">)</span>
+
+<span class="co"># Copy R object to have a working file and a backup</span>
+<span class="va">gradebook</span> <span class="op">&lt;-</span> <span class="va">ExcelGradeBook</span> 
+<span class="va">gradebook</span>
+<span class="co">#&gt; # A tibble: 25 × 63</span>
+<span class="co">#&gt;    Class Name   Race  Gender Age   `Repeated Grade… `Financial Stat… Absent</span>
+<span class="co">#&gt;    &lt;dbl&gt; &lt;chr&gt;  &lt;lgl&gt; &lt;lgl&gt;  &lt;lgl&gt; &lt;lgl&gt;            &lt;lgl&gt;            &lt;chr&gt; </span>
+<span class="co">#&gt;  1     1 Stude… NA    NA     NA    NA               NA               1     </span>
+<span class="co">#&gt;  2     1 Stude… NA    NA     NA    NA               NA               0     </span>
+<span class="co">#&gt;  3     1 Stude… NA    NA     NA    NA               NA               2     </span>
+<span class="co">#&gt;  4     1 Stude… NA    NA     NA    NA               NA               0     </span>
+<span class="co">#&gt;  5     1 Stude… NA    NA     NA    NA               NA               0     </span>
+<span class="co">#&gt;  6     1 Stude… NA    NA     NA    NA               NA               0     </span>
+<span class="co">#&gt;  7     1 Stude… NA    NA     NA    NA               NA               0     </span>
+<span class="co">#&gt;  8     1 Stude… NA    NA     NA    NA               NA               0     </span>
+<span class="co">#&gt;  9     1 Stude… NA    NA     NA    NA               NA               0     </span>
+<span class="co">#&gt; 10     1 Stude… NA    NA     NA    NA               NA               &lt;NA&gt;  </span>
+<span class="co">#&gt; # … with 15 more rows, and 55 more variables: Late &lt;chr&gt;,</span>
+<span class="co">#&gt; #   Make your own categories &lt;lgl&gt;, Running Average &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   Letter Grade &lt;chr&gt;, Homeworks &lt;dbl&gt;, Classworks &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   Formative Assessments &lt;dbl&gt;, Projects &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   Summative Assessments &lt;dbl&gt;, Another Type 2 &lt;lgl&gt;, Classwork 1 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   Homework 1 &lt;dbl&gt;, Classwork 2 &lt;dbl&gt;, Homework 2 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   Classwork 3 &lt;chr&gt;, Classwork 4 &lt;dbl&gt;, Classwork 5 &lt;dbl&gt;, …</span></code></pre></div>
+<div class="infobox">
+<p>If you have appropriate software (and you know how to use it), then inspect the file as the very first step. It is the easiest way to get the full information about the file to import.</p>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="online-science-class-data.html"><span class="header-section-number">2</span> Online Science Class Data</a></div>
+<div class="next"><a href="references.html">References</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#classroom-gradebook"><span class="header-section-number">3</span> Classroom Gradebook</a></li>
+<li><a class="nav-link" href="#introduction-1"><span class="header-section-number">3.1</span> Introduction</a></li>
+<li>
+<a class="nav-link" href="#transfer-file"><span class="header-section-number">3.2</span> Transfer file</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#using-here"><span class="header-section-number">3.2.1</span> Using here()</a></li>
+<li><a class="nav-link" href="#import-file-into-r"><span class="header-section-number">3.2.2</span> Import file into R</a></li>
+<li><a class="nav-link" href="#inspect-file"><span class="header-section-number">3.2.3</span> Inspect file</a></li>
+</ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/petzi53/ldsr/blob/master/02-walkthrough-08.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/petzi53/ldsr/edit/master/02-walkthrough-08.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Learning Data Science with R</strong>" was written by Peter Baumgartner. It was last built on 2021-12-16.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

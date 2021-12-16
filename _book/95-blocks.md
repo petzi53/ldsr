@@ -32,8 +32,15 @@ The `bs4_book` theme also includes special callout blocks, like this `.rmdnote`.
 ::: {.rmdnote}
 You can use **markdown** inside a block.
 
-```{r collapse=TRUE}
+
+```r
 head(beaver1, n = 5)
+#>   day time  temp activ
+#> 1 346  840 36.33     0
+#> 2 346  850 36.34     0
+#> 3 346  900 36.35     0
+#> 4 346  910 36.42     0
+#> 5 346  920 36.55     0
 ```
 
 :::

@@ -6,14 +6,14 @@ Notes of this chapter references chapter 7 ([Walkthrough 1](https://datasciencei
 
 The chapter focuses on processing data to prepare the information for data analysis. At the finish of this chapter there is also an analysis (regression model), but the main point of this walkthrough is data wrangling. The following list presents only those functions where I have learning something new:
 
-- apply a function across multiple columns using `across()`, explaining purrr style formulas, and procedures to convert old `(mutate)_if`, `_at`, and `_all` code
-- create columns from scale values and reversing scales using `case_when()`
-- convert from wide to long format using `pivot_longer()`
-- separate data from one column into different columns using `separate()`
-- join dataset using different kinds of joins (`left_join()`, `semi_join()`, `anti_join()`, `right_join()`)
-- select distinct/unique rows using `distinct()`
-- generate table output `tab_model()` from the {sjPlot} package
-- save tables in Word format using functions from the {apaTables} package
+- apply a function across multiple columns using `across()`, explaining **{purrr}** style formulas, and procedures to convert old `(mutate)_if`, `_at`, in connection with helper function from **{tidyselect}**
+- create columns from scale values and reversing scales using `case_when()` (**{dplyr}**)
+- convert from wide to long format using `pivot_longer()` with **{tidyr}**
+- separate data from one column into different columns using `separate()` (**{tidyr}**)
+- join dataset using different kinds of mutating joins from **{dplyr}** (`left_join()`, `semi_join()`, `anti_join()`, `right_join()`)
+- select distinct/unique rows using `distinct()` (**{dplyr}**)
+- generate table output `tab_model()` from the **{sjPlot}** package
+- save tables in Word format using functions from the **{apaTables}** package
 
 ## Setup
 
@@ -35,7 +35,7 @@ library(tidyverse)
 #> x dplyr::lag()    masks stats::lag()
 library(apaTables)
 library(sjPlot)
-#> Install package "strengejacke" from GitHub (`devtools::install_github("strengejacke/strengejacke")`) to load all sj-packages at once!
+#> Learn more about sjPlot with 'browseVignettes("sjPlot")'.
 library(readxl)
 library(dataedu)
 ```
@@ -63,6 +63,7 @@ glimpse(pre_survey)
 #> $ Q1MaincellgroupRow8  <dbl> 5, 3, NA, 4, NA, 4, NA, 5, NA, 4, 4, 5,…
 #> $ Q1MaincellgroupRow9  <dbl> 5, 4, NA, 2, NA, 4, NA, 3, NA, 3, 3, 4,…
 #> $ Q1MaincellgroupRow10 <dbl> 5, 2, NA, 4, NA, 4, NA, 4, NA, 3, 5, 4,…
+view(pre_survey)
 ```
 
 This data source is a self-report survey. Data was collected

@@ -6,14 +6,14 @@ Notes of this chapter references chapter 7 ([Walkthrough 1](https://datasciencei
 
 The chapter focuses on processing data to prepare the information for data analysis. At the finish of this chapter there is also an analysis (regression model), but the main point of this walkthrough is data wrangling. The following list presents only those functions where I have learning something new:
 
-- apply a function across multiple columns using `across()`, explaining purrr style formulas, and procedures to convert old `(mutate)_if`, `_at`, and `_all` code
-- create columns from scale values and reversing scales using `case_when()`
-- convert from wide to long format using `pivot_longer()`
-- separate data from one column into different columns using `separate()`
-- join dataset using different kinds of joins (`left_join()`, `semi_join()`, `anti_join()`, `right_join()`)
-- select distinct/unique rows using `distinct()`
-- generate table output `tab_model()` from the {sjPlot} package
-- save tables in Word format using functions from the {apaTables} package
+- apply a function across multiple columns using `across()`, explaining **{purrr}** style formulas, and procedures to convert old `(mutate)_if`, `_at`, in connection with helper function from **{tidyselect}**
+- create columns from scale values and reversing scales using `case_when()` (**{dplyr}**)
+- convert from wide to long format using `pivot_longer()` with **{tidyr}**
+- separate data from one column into different columns using `separate()` (**{tidyr}**)
+- join dataset using different kinds of mutating joins from **{dplyr}** (`left_join()`, `semi_join()`, `anti_join()`, `right_join()`)
+- select distinct/unique rows using `distinct()` (**{dplyr}**)
+- generate table output `tab_model()` from the **{sjPlot}** package
+- save tables in Word format using functions from the **{apaTables}** package
 
 ## Setup
 
@@ -38,6 +38,7 @@ library(dataedu)
 # Pre-survey for the F15 and S16 semesters
 pre_survey <- dataedu::pre_survey
 glimpse(pre_survey)
+view(pre_survey)
 ```
 
 This data source is a self-report survey. Data was collected
@@ -172,9 +173,11 @@ Here is an example of the error message:
 starts_with("q")
 ```
 
-> Error: `starts_with()` must be used within a *selecting* function.<br>
-> ℹ See <https://tidyselect.r-lib.org/reference/faq-selection-context.html>.<br>
-> Run `rlang::last_error()` to see where the error occurred.
+::: {.stopbox}
+Error: `starts_with()` must be used within a *selecting* function.<br>
+ℹ See <https://tidyselect.r-lib.org/reference/faq-selection-context.html>.<br>
+Run `rlang::last_error()` to see where the error occurred.
+:::
 
 ##### Purrr style formula
 
@@ -207,7 +210,7 @@ The [column-wise operations](https://dplyr.tidyverse.org/articles/colwise.html) 
   In our case we have to change `mutate(vars(q1:q10), list( ~ as.numeric(.)))` two fold: Inserting the across() call and deleting the `vars()` part. Both steps are fulfilled in replacing `vars` with `across` so that we get:  `mutate(across(q1:q10), list( ~ as.numeric(.))))`
 3. Additionally we could simplify the second part of the code line. Instead of using the more complex formula notation we can write `mutate(across(q1:q10), as.numeric)`
 
-::: {.rmdimportant}
+::: {.todobox}
 I am planning to write a PR for the [GitHub repo](https://github.com/data-edu/data-science-in-education) with
 
 - several typos and to propose to
@@ -254,7 +257,7 @@ pre_survey <-
          q7 = reverse_scale(q7))
 ```
 
-::: {.rmdnote}
+::: {.todobox}
 It would be an interesting exercise to write a more general function:
 - working for likert scales with 5 and 7 levels
 - working for likert scales with a "forced option", where the neutral option is removed. (See [Wikipedia on Likert scales](https://en.wikipedia.org/wiki/Likert_scale))
@@ -404,7 +407,7 @@ course_data
 
 We have now with `course_id` and `student_id` better  variable names as before. But by inspecting the resulting data we see that there is still another problem: For whatever reason the `pre_survey` has `_80624_1` as `student_id` instead just the five characters between the underscores (e.g., `80624`). So we need to extract respectively  subtract these five characters between the underscore (_) symbols.
 
-::: {.rmdcaution}
+::: {.warningbox}
 Student IDs are character strings even if they consists of numbers. Why? It doesn't make sense to use them for calculations. Quite the contrary! It would be an error with fatal consequences to use it as a number. To prevent this mistake it is a measure of precaution to change their data type to character (or factor).
 
 The book goes the other direction: In order to match both variable types it converts the character strings to a numbers. I would recommend the reverse procedure: To convert the number type of `student_id` in `course_data` into a character type.
