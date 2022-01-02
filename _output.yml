@@ -1,5 +1,5 @@
 bookdown::bs4_book:
-  css: bs4_style.css
+  css: ["css/bs4_style.css", "css/boxes.css"]
   theme:
     primary: "#4D6F8D"
   repo: https://github.com/petzi53/ldsr

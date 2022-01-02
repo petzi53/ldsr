@@ -411,7 +411,8 @@ We have now with `course_id` and `student_id` better  variable names as before. 
 Student IDs are character strings even if they consists of numbers. Why? It doesn't make sense to use them for calculations. Quite the contrary! It would be an error with fatal consequences to use it as a number. To prevent this mistake it is a measure of precaution to change their data type to character (or factor).
 
 The book goes the other direction: In order to match both variable types it converts the character strings to a numbers. I would recommend the reverse procedure: To convert the number type of `student_id` in `course_data` into a character type.
-:::
+
+tip
 
 To extract the five characters between the underscore we are going to use the function `str_sub()` form the {stringr} package, another package from the {tidyverse}. The syntax is the following one:
 

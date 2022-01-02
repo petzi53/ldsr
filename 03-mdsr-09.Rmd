@@ -1,0 +1,707 @@
+# Statistical Foundation
+
+## Introduction
+
+Notes of this chapter references chapter 9 [Statistical Foundation](https://mdsr-book.github.io/mdsr2e/ch-foundations.html) of [Modern Data Science with R](https://mdsr-book.github.io/mdsr2e/), 2nd edition.
+
+This chapter will elucidate some of the connections between the sample — the data we’ve got — and the population. To do this, we’ll use an artifice: constructing a playground that contains the entire population. Then, we can work with data consisting of a smaller set of cases selected at random from this population. This lets us demonstrate and justify the statistical methods in a setting where we know the "correct" answer. That way, we can develop ideas about how much confidence statistical methods can give us about the patterns we see.
+
+The interesting thing to learn here is that we can draw statistical conclusion and to compare them with the "real" dataset. So we will get not only a theoretical explanation of the statistical parameters of the sample but we will also see their relationships with the population data. 
+
+### Simulated task
+
+Suppose you were asked to help develop a travel policy for business travelers based in New York City. Imagine that the traveler has a meeting in San Francisco (airport code SFO) at a specified time  
+$t$. The policy to be formulated will say how much earlier than $t$ an acceptable flight should arrive in order to avoid being late to the meeting due to a flight delay.
+
+For the purpose of this example we are going to pretend that we already have on hand the complete population of flights. For this purpose, we’re going to use the subset of 336,776 flights in 2013 in the **{nycflights13}** package, which gives airline delays from New York City airports in 2013. The policy we develop will be for 2013. Of course this is unrealistic in practice. If we had the complete population we could simply look up the best flight that arrived in time for the meeting!
+
+### Setup
+
+```{r setup}
+library(tidyverse)
+library(mdsr)
+library(nycflights13)
+# library(conflicted)
+```
+
+More realistically, the problem would be to develop a policy for this year based on the sample of data that have already been collected. We’re going to simulate this situation by drawing a sample from the population of flights into SFO. Playing the role of the population in our little drama, SF comprises the complete collection of such flights.
+
+```{r get-SF-flights}
+SF <- flights %>%
+  filter(dest == "SFO", !is.na(arr_delay))
+```
+
+We get 13,173 records including already the substracted 158 observations where a value for `arr_delay` is not available (`NA`). The filter code combines two logical expressions: It chooses all "SFO" destinations *and* does *not* select (`!`) flights where no values are available (`NA`'s). We could have used the following code to express the `AND` operation explicitly: `filter(dest == "SFO" & !is.na(arr_delay)`. When multiple expressions are used, they are always combined using `&`. If you want to use the logical operator `OR` you have always to write it `|` to combine the two expressions.
+
+## Population sample
+
+### Sample size $n = 25$
+
+We’re going to work with just a sample from this population. For now, we’ll set the sample size to be $n = 25$ cases.
+
+```{r sample-25}
+set.seed(101)
+sf_25 <- SF %>%
+  slice_sample(n = 25)
+```
+
+The function `set.seed()` is necessary to ensure that the pseudo random generator will get the same results as in the book. 
+
+The function `slice_sample()` is the new and actual variant to sample rows from a table. It is a special application from other methods of subsetting rows (`slice_head()`, `slice_tail()`, `slice_min()`, `slice_max()`). It supersedes the `sample_n()` function that you will still see often in older books.
+
+
+::: {.infobox}
+To see what the data are like, people often use the `head()` or `tail()` function. But the first and last rows of dataset are sometimes different and therefore note representative of the data. Instead use `slice_sample()`, for instance `slice_sample(n = 10)`.
+:::
+
+To repeat and emphasize what we have done so far: We have drawn a [sample](https://en.wikipedia.org/wiki/Sample_(statistics)) of 25 rows from out simulated [population](https://en.wikipedia.org/wiki/Statistical_population).
+
+### A: Longest flight delay
+
+A simple (but näive) way to set the policy is to look for the longest flight delay and insist that travel be arranged to deal with this delay.
+
+```{r sample-longest-delay}
+sf_25 %>%
+  skim(arr_delay)
+```
+
+::: {.infobox}
+The `skim()` function is imported to the book **{mdsr}** package. It stems originally from the **{skimr}** package, which has many other useful functions for exploratory data analysis (EDA). 
+:::
+
+The longest delay in our sample is 103 minutes. So, should our travel policy be that the traveler should plan on arriving in SFO about 2 hours (120 minutes) ahead?
+
+Keep in mind that we have drawn just a sample, and minimum and maximum values are extremely fragile. Particular values depend to a much degree on random events. checking these extrreme values in our "population" shows this demonstratively:
+
+```{r pop-longest-delay}
+SF %>%
+  skim(arr_delay)
+```
+
+The actual worst delay in 2013 was 1007 minutes, about `r round((1007 / 60), 0)` hours. This suggests that to avoid missing a meeting, you should travel the day before the meeting. Safe enough, but then:
+
+- Even at that extreme measure, there’s no guarantee that there will never be a delay of more than 1,007 minutes.
+- Besides that consideration: An extra travel day is expensive in terms of lodging, meals, and the traveler’s time.
+
+### B: 98% chance
+
+A sensible travel policy will trade off small probabilities of being late against the savings in cost and traveler’s time. For instance, you might judge it acceptable to be late just 2% of the time — a 98% chance of being on time.
+
+```{r sample-98-chance}
+sf_25 %>%
+  summarize(q98 = quantile(arr_delay, p = 0.98))
+```
+
+A delay of 68 minutes is more than an hour. The calculation is easy, but how good is the answer? This is not a question about whether the $98^{th}$ percentile was calculated properly—that will always be the case for any competent data scientist. The question is really along these lines: Suppose we used a 90-minute travel policy. So we would have a safety margin of 22 minutes, or about 33%. How well would that have worked in achieving our intention to be late for meetings only 2% of the time?
+
+With our "population" data in hand, it’s easy to answer this question.
+
+```{r pop-90-min}
+SF %>%
+  group_by(arr_delay < 90) %>%
+  count() %>%
+  mutate(pct = n / nrow(SF))
+```
+
+The 90-minute policy would miss its mark 5% of the time, much worse than we intended. To correctly hit the mark 2% of the time, we will want to increase the policy from 90 minutes to what value?
+
+With the population, it’s easy to calculate the  $98^{th}$ percentile of the arrival delays:
+
+```{r pop-q98}
+SF %>%
+  summarize(q98 = quantile(arr_delay, p = 0.98))
+```
+
+It should have been about 150 minutes.
+
+But in most real-world settings, we do not have access to the population data. We have only our sample. 
+
+Another problem is, that calculating the $98^{th}$ percentile is — similar as the minimum and maximum we mentioned before — not a reliable sample statistic for small samples (such as our 25 flights into SFO), in the sense that it will vary considerably in small samples.
+
+Ultimately we need to figure out the reliability of a sample statistic from the sample itself. For now, though, we are going to use the population to develop some ideas about how to define reliability. So we will still be in the playground world where we have the population in hand.
+
+### C: Sampling distribution
+
+If we were to collect a new sample from the population, how similar would the sample statistic on that new sample be to the same statistic calculated on the original sample? Or, stated somewhat differently, if we draw many different samples from the population, each of size $n$, and calculated the sample statistic on each of those samples, how similar would the sample statistic be across all the samples?
+
+With the population in hand, it’s easy to figure this out; use `slice_sample()` many times and calculate the sample statistic on each trial. For instance, here are two trials in which we sample and calculate the mean arrival delay. 
+
+```{r sample-twice}
+n <- 25
+SF %>%
+  slice_sample(n = n) %>%
+  summarize(mean_arr_delay = mean(arr_delay))
+
+SF %>%
+  slice_sample(n = n) %>%
+  summarize(mean_arr_delay = mean(arr_delay))
+```
+As the book not used the `set.seed()` function my (and your) result will differ from the book.
+
+Perhaps it would be better to run many trials (though each one would require considerable effort in the real world). The `map()` function from the **{purrr}** package lets us automate the process. Here are the results from 500 trials.
+
+```{r sample-500-trials}
+num_trials <- 500
+set.seed(321)
+sf_25_means <- 1:num_trials %>%
+  map_dfr(
+    ~ SF %>%
+      slice_sample(n = n) %>%
+      summarize(mean_arr_delay = mean(arr_delay))
+  ) %>%
+  mutate(n = n)
+
+head(sf_25_means)
+```
+Again we will get different results as the book. The `set.seed()` function has to be invoked immediately before each random operation. It is not like a variable which value is stored and used again when it is called. In contrast to the book I have here used it, so that — if you want — you can reproduce my results. 
+
+`map_dfr()` requires a function, formula, or vector. Here — with tilde symbol (`~`) — we are using a formula. `map_dfr()` returns a data frame created by row-binding. `df` stands for data frame and the `r` for row-binding. There is another similar function `map_dfc()` where the data frame is created by column-binding.
+
+We now have 500 trials, for each of which we calculated the mean arrival delay. Let’s examine how spread out the results are.
+
+```{r sample-25-spread}
+sf_25_means %>%
+  skim(mean_arr_delay)
+
+
+```
+
+#### Standardized vocabulary
+
+To discuss reliability, it helps to have some standardized vocabulary.
+
+The **sample size** is the number of cases in the sample, usually denoted with $n$. In the above, the sample size is $n = 25$.
+
+The **sampling distribution** is the collection of the sample statistic from all of the trials. We carried out 500 trials here, but the exact number of trials is not important so long as it is large.
+
+The **shape** of the sampling distribution is worth noting. Here it is a little skewed to the right. We can tell because in this case the mean is more than twice the median. (This text is correct even we have a very different result as in the book. In the book $mean = 1,76$, and the $median = 0.76$. Try it out again and draw another 500 sample without the set.seed() function or with a different value inside the function. You will get again different values, but again the distribution is little skewed to the right, e.g., the mean is bigger, mostly about the double of the median. In this sense the sample of 500 trials is already pretty stable.)
+
+The **standard error** is the standard deviation of the sampling distribution. It describes the width of the sampling distribution. For the trials calculating the sample mean in samples with $n = 25$, the standard error is 9.51 minutes. (You can see this value in the output of skim() above, as the standard deviation of the sample means that we generated.)
+
+The 95% **confidence interval** is another way of summarizing the sampling distribution. From the calculation you can see it is about  −16 to +21 minutes. The interval can be used to identify plausible values for the true mean arrival delay. It is calculated from the mean and standard error of the sampling distribution.
+
+### D: Confidence intervals
+
+```{r sample-ci}
+sf_25_means %>%
+  summarize(
+    x_bar = mean(mean_arr_delay),
+    se = sd(mean_arr_delay)
+  ) %>%
+  mutate(
+    ci_lower = x_bar - 2 * se, # approximately 95% of observations 
+    ci_upper = x_bar + 2 * se  # are within two standard errors
+  )
+
+```
+
+Again I have different values as the book. I have $-16.7$ to $21.4$ whereas the book results are  $-16.7$ to $20.2$. My results includes about 72 seconds more delays in the 95% confidence interval. (By the way: The correct calculation for a 95% CI would not be 2.0 but 1.96.)
+
+
+### E: t-test
+
+Alternatively, it can be calculated directly using a [t-test](https://en.wikipedia.org/wiki/Student%27s_t-test).
+
+```{r sample-t-test}
+sf_25_means %>%
+  pull(mean_arr_delay) %>%
+  t.test()
+```
+The result is significant because of a p-value of 0.00000003099.
+
+The mean of 2.39 minutes is identical with the previous CI calculation. I have to confess that I have difficulties to interpret the other values of the t-test. But what about 1.56 and 3.23? Where does it come from? 
+
+
+::: {.todobox}
+Check the interpretation of the results of a `t.test` in R with other books!
+:::
+
+
+### Sample size $n = 100$
+
+An important question that statistical methods allow you to address is what size of sample $n$ is needed to get a result with an acceptable reliability. Measuring the reliability is a straightforward matter of finding the standard error and/or confidence interval.
+
+Notice that the sample statistic varies considerably. For samples of size $n = 25$ they range (in the book) from $−17$ to $57$ minutes. In my case it ranges from $-24$ to $54$ minutes. The spread in the book ist $74$ and in my case it is with $78$ even larger.
+
+We used a sample size of $n = 25$ and found a standard error of 9.2 resp. 9.5 minutes. What would happen if we used an even larger sample, say $n = 100$? The calculation is the same as before but with a different $n$.
+
+```{r sample-100}
+n <- 100
+set.seed(321)
+
+sf_100_means <- 1:500 %>%
+  map_dfr(
+    ~ SF %>%
+      slice_sample(n = n) %>%
+      summarize(mean_arr_delay = mean(arr_delay))
+  ) %>%
+  mutate(n = n)
+
+
+sf_25_means %>%
+  bind_rows(sf_100_means) %>%
+  ggplot(aes(x = mean_arr_delay)) + 
+  geom_histogram(bins = 30) + 
+  facet_grid( ~ n) + 
+  xlab("Sample mean")
+```
+
+Comparing the two sampling distributions shows some patterns that are generally true for statistics such as the mean:
+
+- Both sampling distributions are centered at the same value.
+- A larger sample size produces a standard error that is smaller. That is, a larger sample size is more reliable than a smaller sample size. You can see that the standard deviation for $n = 100$ is one-half that for $n = 25$. As a rule, the standard error of a sampling distribution scales as 1/√n.
+- For large sample sizes, the shape of the sampling distribution tends to bell-shaped.
+
+## The bootstrap
+
+### Resampling
+
+The bootstrap is a statistical method that allows us to approximate the sampling distribution even without access to the population.
+
+In the bootstrap we will draw many new samples from our original sample. This process is called **resampling**: drawing a new sample from an existing sample.
+
+When sampling from a population, we would of course make sure not to duplicate any of the cases, just as we would never deal the same playing card twice in one hand. When resampling, however, we do allow such duplication (in fact, this is what allows us to estimate the variability of the sample). Therefore, we **sample with replacement**.
+
+Bootstrapping does not create new cases: It isn’t a way to collect data. 
+
+
+```{r sample-200}
+n <- 200
+set.seed(321)
+
+orig_sample <- SF %>% 
+  slice_sample(n = n, replace = FALSE)
+
+orig_sample %>%
+  slice_sample(n = n, replace = TRUE) %>%
+  summarize(mean_arr_delay = mean(arr_delay))
+
+```
+
+### Sample variation
+
+By repeating this process many times, we’ll be able to see how much variation there is from sample to sample:
+
+```{r sample-variation}
+set.seed(321)
+
+sf_200_bs <- 1:num_trials %>%
+  map_dfr(
+    ~orig_sample %>%
+      slice_sample(n = n, replace = TRUE) %>%
+      summarize(mean_arr_delay = mean(arr_delay))
+  ) %>%
+  mutate(n = n)
+
+sf_200_bs %>%
+  skim(mean_arr_delay)
+```
+
+We could estimate the standard deviation of the arrival delays to be about 3.1 (in the book), resp. 3.4 minutes (my example).  Again I have used `set.seed()`, so you can reproduce my results exactly.
+
+### Hypothetical sample
+
+Ordinarily, we wouldn’t be able to check this result. But because we have access to the population data in this example, we can. Let’s compare our bootstrap estimate to a set of (hypothetical) samples of size $n = 200$ from the original SF flights (the population).
+
+```{r hypothetical-sample}
+set.seed(321)
+
+sf_200_pop <- 1:num_trials %>%
+  map_dfr(
+    ~SF %>%
+      slice_sample(n = n, replace = TRUE) %>%
+      summarize(mean_arr_delay = mean(arr_delay))
+  ) %>%
+  mutate(n = n)
+
+sf_200_pop %>%
+  skim(mean_arr_delay)
+```
+
+Notice that the population was not used in the bootstrap (`sf_200_bs`), just the original sample. What’s remarkable here is that the standard error calculated using the bootstrap (3.1 resp. 3.4 minutes) is a reasonable approximation to the standard error of the sampling distribution calculated by taking repeated samples from the population (3.3  resp. 3.4 minutes). In my case it is not only a reasonable approximation but both sample and hypothetical sample have --- after rounding --- the same value (3.4 minutes)!
+
+The distribution of values in the bootstrap trials is called the **bootstrap distribution**. It’s not exactly the same as the sampling distribution, but for moderate to large sample sizes and sufficient number of bootstraps it has been proven to approximate those aspects of the sampling distribution that we care most about, such as the standard error and quantiles (B. Efron and Tibshirani 1993).
+
+### Travel Policy
+
+```{r sample-q98}
+orig_sample %>%
+  summarize(q98 = quantile(arr_delay, p = 0.98))
+```
+The sample itself suggests a policy of scheduling a flight to arrive 141 minutes early. Compare the big difference to my sample where just 110 minutes (= more than a half hour less!) would be enough.
+
+Let us check the reliability of that estimate using bootstrapping.
+
+```{r check-with-bootstrap}
+n <- nrow(orig_sample)
+
+set.seed(321)
+sf_200_bs <- 1:num_trials %>%
+  map_dfr(
+    ~orig_sample %>%
+      slice_sample(n = n, replace = TRUE) %>%
+      summarize(q98 = quantile(arr_delay, p = 0.98))
+  )
+
+sf_200_bs %>%
+  skim(q98)
+```
+
+The bootstrapped standard error is about 29 (resp. 39!) minutes. The corresponding 95% confidence interval is $140 ± 58$ resp. $114 ± 78$ minutes. A policy based on this would be practically a shot in the dark: unlikely to hit the target.
+
+One way to fix things might be to collect more data, hoping to get a more reliable estimate of the $98^{th}$ percentile. Imagine that we could do the work to generate a sample with $n = 10,000$ cases.
+
+```{r bs-10000}
+set.seed(1001)
+n_large <- 10000
+sf_10000_bs <- SF %>% 
+  slice_sample(n = n_large, replace = FALSE)
+
+sf_200_bs <- 1:num_trials %>%
+  map_dfr(~sf_10000_bs %>%
+        slice_sample(n = n_large, replace = TRUE) %>%
+        summarize(q98 = quantile(arr_delay, p = 0.98))
+  )
+
+sf_200_bs %>%
+  skim(q98)
+```
+This time the book used `set.seed()`. So we get the same results: The standard deviation is much narrower, $154 ± 8$ minutes. Having more data makes it easier to better refine estimates, particularly in the tails.
+
+## Outliers
+
+Outliers can often tell us interesting things. How they should be handled depends on their cause:
+
+::: {.infobox}
+- Outliers due to data irregularities or errors should be fixed. 
+- Other outliers may yield important insights. 
+- Outliers should never be dropped unless there is a clear rationale. 
+- If outliers are dropped this should be clearly reported.
+:::
+
+Suppose we consider any flight delayed by 7 hours (420 minutes) or more as an extreme event (see Section 15.5). While an arbitrary choice, 420 minutes may be valuable as a marker for seriously delayed flights.
+
+```{r outliers-420min}
+SF %>%
+  filter(arr_delay >= 420) %>% 
+  select(month, day, dep_delay, arr_delay, carrier)
+```
+
+Most of the very long delays (five of seven) were in July, and Virgin America (`VX`) is the most frequent offender. Immediately, this suggests one possible route for improving the outcome of the business travel policy we have been asked to develop. We could tell people to arrive extra early in July and to avoid `VX`.
+
+::: {.greybox}
+In addition to this remark there is also another pattern: There is a narrow connection between `arr_delay` and `dep_delay`. All outliers have already a departure delay of the same magnitude of their arrival delay. The main cause of their delays is not the flight itself. Four of these outliers have even (slightly) reduced their delay after their flights.
+
+For someone who wants to research the main causes of flight delays this is a hint to look into departure delays (and not into arrival delays). Question might be: 
+
+- Is the relation between departure and arrival delay only observable with outliers respectively with huge departure delays or is it a general pattern?
+- What exactly does it mean to have a departure delay? Is this a consequence of a late arrival? Maybe even a series of delayed arrivals?
+
+The first question could be answered with the dataset, the second not.
+:::
+
+
+::: {.todobox}
+How to answer the first question? Is there a general relationship between departure and arrival delays? (The second question I cannot answer with my available data.)
+:::
+
+::: {.graybox}
+These questions are examples of an EDA connecting with outliers. I believe that a group of outliers always pose some interesting questions. As not inspiring further research, some of them may be coded wrongly. But if all of them are wrong then there is the interesting questions: What is the reason for this massive wrongly coded data?
+:::
+
+The large majority of flights arrive without any delay or a delay of less than 60 minutes. Might we be able to identify patterns that can presage when the longer delays are likely to occur? The outliers suggested that `month` or `carrier` may be linked to long delays. Let’s see how that plays out with the large majority of data.
+
+```{r delay-per-month}
+SF %>% 
+  mutate(long_delay = arr_delay > 60) %>%
+  group_by(month, long_delay) %>%
+  count() %>%
+  pivot_wider(names_from = month, values_from = n) %>%
+  data.frame()
+```
+
+```{r delay-per-airline}
+SF %>% 
+  mutate(long_delay = arr_delay > 60) %>%
+  group_by(carrier, long_delay) %>%
+  count() %>%
+  pivot_wider(names_from = carrier, values_from = n) %>%
+  data.frame()
+```
+
+Two results:
+
+1. We see that June and July (months 6 and 7) are problem months.
+2. Delta Airlines (`DL`) has reasonable performance. (See [Section 15.5](https://mdsr-book.github.io/mdsr2e/ch-sql.html#sec:ft8-flights) for a fuller discussion of which airlines seem to have fewer delays in general.)
+
+
+## Statistical models
+
+Statistical modeling provides a way to relate variables to one another. Doing so helps us better understand the system we are studying.
+
+For illustration we will investige the following question: What impact, if any, does scheduled time of departure have on expected flight delay? Many people think that earlier flights are less likely to be delayed, since flight delays tend to cascade over the course of the day. Is this theory supported by the data?
+
+```{r group-by-hour}
+SF |> 
+  group_by(hour) |> 
+  count() |> 
+  pivot_wider(names_from = hour,
+              values_from = n) |> 
+  data.frame()
+```
+
+::: {.greybox}
+In contrast to the book my code snippet has two changes:
+
+- I added a `names_prefix` for the purpose of my personal learning. I thought that without this option a numeric vector prefixes an `X` in front of the value. _But this is not true!_ It is the additional `data_frame()` function, that adds the X as in the box results. Actually I do not know what the reason for this function otherwise would be. As I prefer to work with tibbles (and not with data frames) I did not use the `data_frame()` function. If you want all values prefixed with `X` I would suggest to use the `names_prefix` option..
+- As I already mentioned: I did not use the `data_frame()` function. 
+
+Even the `pivot_wider()` function is not necessary in my opinion. It purpose is only to shorten the presentation for the book by displaying all values in one line.
+:::
+
+We see that many flights are scheduled in the early to mid-morning and from the late afternoon to early evening. None are scheduled before 5 am or after 10 pm.
+
+::: {.todobox}
+I am not sure if listing values is the appropriate method. Maybe a histogram would be better?
+:::
+
+
+::: {.todobox}
+Visualize the above grouping by hour.
+:::
+
+Let’s examine how the arrival delay depends on the hour. We’ll do this in two ways: first using standard box-and-whisker plots to show the distribution of arrival delays; second with a kind of statistical model called a linear model that lets us track the mean arrival delay over the course of the day.
+
+### Box and whisker plot
+
+```{r delay-boxplot-lm}
+SF %>%
+  ggplot(aes(x = hour, y = arr_delay)) +
+  geom_boxplot(outlier.alpha = 0.1, aes(group = hour)) + # first method
+  geom_smooth(method = "lm") +                           # second method
+  xlab("Scheduled hour of departure") + 
+  ylab("Arrival delay (minutes)") + 
+  coord_cartesian(ylim = c(-30, 120))
+```
+
+The figure displays the arrival delay versus schedule departure hour. The average arrival delay increases over the course of the day. The trend line itself is created via a regression model (see Appendix E).
+
+```{r lm-report}
+mod1 <- lm(arr_delay ~ hour, data = SF)
+broom::tidy(mod1)
+```
+
+### Model interpretation
+
+
+#### Column "estimate"
+
+::: {.greybox}
+I believe that the intercept has no meaning here. (Is this correct?)
+:::
+
+The number under the “estimate” for hour indicates that the arrival delay is predicted to be about 2 minutes higher per hour. Over the 15 hours of flights, this leads to a 30-minute increase in arrival delay comparing flights at the end of the day to flights at the beginning of the day.
+
+#### Standard error
+
+The `tidy()` function from the **{broom}** package also calculates the standard error: 0.09 minutes per hour. 
+
+Stated as a 95% confidence interval, this model indicates that we are 95% confident that the true arrival delay increases by $2.0 ± 0.18$ minutes per hour.
+
+#### p-value
+
+The rightmost column gives the p-value, a way of translating the estimate and standard error onto a scale from zero to one. By convention, p-values below 0.05 provide a kind of certificate testifying that random, accidental patterns would be unlikely to generate an estimate as large as that observed. The tiny p-value given in the report (2e-16 is 0.0000000000000002) is another way that "random, accidental patterns would be unlikely to generate an estimate as large as that observed."
+
+::: {.greenbox}
+
+The general formel for the interpretation for the p-value is:
+
+The p-value is another way of saying that if there was no association, we would be very unlikely to see a result this extreme or more extreme.
+:::
+
+Despite an almost universal practice of presenting p-values, they are mostly misunderstood even by scientists and other professionals. The p-value conveys much less information than usually supposed: The “certificate” might not be worth the paper it’s printed on (see Section 9.7).
+
+### Multiple regression linear model
+
+Can we do better? What additional factors might help to explain flight delays? Let’s look at 
+
+- departure airport (`origin`) 
+- airline (`carrier`)
+- month of the year (6 and 7 as `season`) 
+- day of the week (`dow`).
+
+Some data wrangling with the help of the **{lubricate}** package will let us extract the day of the week (dow) from the year, month, and day of month.
+
+```{r create-calender-factors}
+library(lubridate)
+SF <- SF %>% 
+  mutate(
+    day = as.Date(time_hour), 
+    dow = as.character(wday(day, label = TRUE)),
+    season = ifelse(month %in% 6:7, "summer", "other month")
+  )
+
+```
+Now we can build a model that includes variables we want to use to explain arrival delay.
+
+```{r multi-lm}
+mod2 <- lm(arr_delay ~ hour + origin + carrier + season + dow, data = SF)
+broom::tidy(mod2)
+```
+
+The numbers in the “estimate” column tell us that we should add 4.1 minutes to the average delay if departing from JFK (instead of EWR, also known as Newark, which is the reference group). Delta has a better average delay than the other carriers. Delays are on average longer in June and July (by 25 minutes), and on Sundays (by 5 minutes). 
+
+::: {.infobox}
+For every variable there is a reference value. It is the element that comes first alphabetically. For instance, let us see all the levels of the factor `carrier`.
+
+```{r unique-carriers}
+sort(unique(SF$carrier))
+```
+In this case American Airlines (`AA`) is the reference group of flights. (See the dataframe `airlines` to get the full name from the carrier code)
+:::
+
+The model also indicates that Sundays are associated with roughly 5 minutes of additional delays; Saturdays are 6 minutes less delayed on average. (Each of the days of the week is being compared to Friday, chosen as the reference group because it comes first alphabetically.) 
+
+The standard errors tell us the precision of these estimates; the p-values describe whether the individual patterns are consistent with what might be expected to occur by accident even if there were no systemic association between the variables.
+
+In this example, we’ve used `lm()` to construct what are called linear models. Linear models describe how the mean of the response variable varies with the explanatory variables. They are the most widely used statistical modeling technique, but there are others. In particular, since our original motivation was to set a policy about business travel, we might want a modeling technique that lets us look at another question: What is the probability that a flight will be, say, greater than 100 minutes late? Without going into detail, we’ll mention that a technique called logistic regression is appropriate for such dichotomous outcomes (see Chapter 11 and Section E.5 for more examples).
+
+## Confounding factors
+
+Let’s consider an example of confounding using observational data on average teacher salaries (in 2010) and average total SAT scores for each of the 50 United States. The SAT (Scholastic Aptitude Test) is a high-stakes exam used for entry into college. Are higher teacher salaries associated with better outcomes on the test at the state level? If so, should we adjust salaries to improve test performance? The following figure displays a scatterplot of these data. We also fit a linear regression model.
+
+```{r sat-scatterplot}
+SAT_2010 <- SAT_2010 %>%
+  mutate(Salary = salary/1000)
+SAT_plot <- ggplot(data = SAT_2010, aes(x = Salary, y = total)) + 
+  geom_point() + 
+  geom_smooth(method = "lm") + 
+  ylab("Average total score on the SAT") + 
+  xlab("Average teacher salary (thousands of USD)")
+SAT_plot
+```
+
+```{r sat-lm}
+SAT_mod1 <- lm(total ~ Salary, data = SAT_2010)
+broom::tidy(SAT_mod1)
+```
+
+::: {.infobox}
+The strange result is that there is a _negative association_ with teacher salaries. This means that states would have to lower the salary of teacher to get better SAT results!
+:::
+
+Lurking in the background, however, is another important factor. The percentage of students who take the SAT in each state varies dramatically (from 3% to 93% in 2010). We can create a variable called `SAT_grp` that divides the states into two groups.
+
+```{r skim-sat-pct}
+SAT_2010 %>%
+  skim(sat_pct)
+```
+
+We will take the median to create two equally sized groups:
+
+```{r}
+SAT_2010 <- SAT_2010 %>%
+  mutate(SAT_grp = ifelse(sat_pct <= 27, "Low", "High"))
+
+SAT_2010 %>%
+  group_by(SAT_grp) %>%
+  count()
+```
+
+Now we can display a scatterplot of these data stratified by the grouping of percentage taking the SAT.
+
+```{r stratified-sat}
+SAT_plot %+% SAT_2010 + 
+  aes(color = SAT_grp) + 
+  scale_color_brewer("% taking\nthe SAT", palette = "Set2")
+```
+
+::: {.greybox}
+1. What does `%+%` mean? It is a kind concatenation of character vecotrs. It comes from the **{crayon}** package which provides colored terminal output.
+2. What is above concatenated? The preferences of the previous scatterplot are combined with the new stratified `SAT-data`. This is an interesting application because `SAT_plot` is type `gg` and `SAT_2010` is type `data.frame`.
+:::
+
+## Perils of p-value
+
+Several take home messages:
+
+### Defintion of p-value
+
+::: {.infobox}
+A p-value is defined as the probability of seeing a sample statistic as extreme (or more extreme) than the one that was observed if it were really the case that patterns in the data are a result of random chance. This hypothesis, that only randomness is in play, is called the null hypothesis.
+:::
+
+### How to report p-values
+
+::: {.infobox}
+Always report the actual p-value (or a statement that it is less than some small value such as p < 0.0001) rather than just the decision (reject null vs. fail to reject the null). In addition, confidence intervals are often more interpretable and should be reported as well.
+:::
+
+### Some ASA principles
+
+::: {.infobox}
+- p-values do not measure the probability that the studied hypothesis is true, or the probability that the data were produced by random chance alone.
+- Scientific conclusions and business or policy decisions should not be based only on whether a p-value passes a specific threshold.
+- A p-value, or statistical significance, does not measure the size of an effect or the importance of a result.
+- By itself, a p-value does not provide a good measure of evidence regarding a model or hypothesis.
+:::
+
+### Multiple comparisons
+
+Imagine that a clinical trial has five outcomes that are defined as being of primary interest. If the usual procedure in which a test is declared statistically significant if its p-value is less than 0.05 is used, the null hypotheses are true, and the tests are independent, we would expect that we would reject one or more of the null hypotheses more than 22% of the time (considerably more than 5% of the time we want).
+
+```{r p-value-with-5-comparisons}
+1 - (1 - 0.05)^5
+```
+
+A simple, albeit conservative approach to counteract the problem of multiple comparisons is the use of a [Bonferroni correction](https://en.wikipedia.org/wiki/Bonferroni_correction). Consider dividing our $α$-level by the number of tests, and only rejecting the null hypothesis when the p-value is less than this adjusted value. In our example, the new threshold would be $0.01$ (and the overall experiment-wise error rate is preserved at $0.05$).
+
+```{r bonferri-correction-5-comparisons}
+1 - (1 - 0.05/5)^5
+```
+
+::: {.infobox}
+For analyses that involve many hypothesis tests it is appropriate to include a note of possible limitations that some of the results may be spurious due to [multiple comparisons](https://en.wikipedia.org/wiki/Multiple_comparisons_problem).
+:::
+
+### Garden of forking paths
+
+[El jardín de senderos que se bifurcan](https://en.wikipedia.org/wiki/The_Garden_of_Forking_Paths) (Garden of forking path) is a book by Jorge Luis Borges.
+
+A related problem has been called the garden of forking paths by Andrew Gelman of Columbia University. Most analyses involve many decisions about how to code data, determine important factors, and formulate and then revise models before the final analyses are set. This process involves looking at the data to construct a parsimonious representation. For example, a continuous predictor might be cut into some arbitrary groupings to assess the relationship between that predictor and the outcome. Or certain variables might be included or excluded from a regression model in an exploratory process.
+
+This process tends to lead towards hypothesis tests that are biased against a null result, since decisions that yield more of a signal (or smaller p-value) might be chosen rather than other options. In clinical trials, the garden of forking paths problem may be less common, since analytic plans need to be prespecified and published. For most data science problems, however, this is a vexing issue that leads to questions about reproducible results.
+
+::: {.infobox}
+To counteract the garden of forking paths preregistration may help: Analytic plans need to be prespecified and published. So you can demonstrate and people can examine what were you plans before you have started with the study and data wrangling.
+:::
+
+## Further resources
+
+### Background in basic statistics
+
+- Çetinkaya-Rundel, M., & Hardin, J. (2021). Introduction to Modern Statistics. OpenIntro, Inc. Retrieved from https://openintro-ims.netlify.app/
+
+
+
+### Statistical practice
+
+- Belle, G. van. (2011). Statistical Rules of Thumb (2nd ed.). Wiley-Interscience.
+- Good, P. I., & Hardin, J. W. (2012). Common Errors in Statistics (4th ed.). Wiley.
+
+
+## Theoretical statistics
+
+- Shalizi, C. R. (n.d.). Advanced Data Analysis from an Elementary Point of View. 861. Retrieved from http://www.stat.cmu.edu/~cshalizi/ADAfaEPoV/
+
+## Educational approaches
+
+- Green, J. L., and E. E. Blankenship. 2015. “Fostering Conceptual Understanding in Mathematical Statistics.” The American Statistician 69 (4): 315–25.
+- Hardin, J., R. Hoerl, N. J. Horton, D. Nolan, B. S. Baumer, O. Hall-Holt, P. Murrell, et al. 2015. “Data Science in Statistics Curricula: Preparing Students to ’Think with Data’.” The American Statistician 69 (4): 343–53.
+- Horton, N. J. 2013. “I Hear, I Forget. I Do, I Understand: A Modified Moore-Method Mathematical Statistics Course.” The American Statistician 67 (3): 219–28.
+- ———. 2015. “Challenges and Opportunities for Statistics and Statistical Education: Looking Back, Looking Forward.” The American Statistician 69 (2): 138–45.
+- Horton, N. J., B. S. Baumer, and H. Wickham. 2015. “Setting the Stage for Data Science: Integration of Data Management Skills in Introductory and Second Courses in Statistics.” Chance 28 (2).
+- Horton, N. J., E. R. Brown, and L. Qian. 2004. “Use of R as a Toolbox for Mathematical Statistics Exploration.” The American Statistician 58 (4): 343–57.
+- Horton, N. J., and J. S. Hardin. 2015. “Teaching the Next Generation of Statistics Students to “Think with Data": Special Issue on Statistics and the Undergraduate Curriculum.” The American Statistician 69 (4): 259–65.
+- Horton, N. J., and K. P. Kleinman. 2007. “Much Ado about Nothing: A Comparison of missing Data Methods and Software to Fit Incomplete Data Regression Models.” The American Statistician 61: 79–90.
+- Nolan, D., and T. P. Speed. 1999. “Teaching Statistics Theory Through Applications.” The American Statistician 53: 370–75.
